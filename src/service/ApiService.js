@@ -179,25 +179,6 @@ export default class ApiService {
         return resp.data;
     }
 
-    //PAYMMENT 
-    //funtion to create payment intent
-    static async proceedForPayment(body) {
-        const resp = await axios.post(`${this.BASE_URL}/payments/pay`, body, {
-            headers: this.getHeader()
-        });
-        return resp.data; //return the strip transaction id for this transaction
-    }
-
-    //TO UPDATE PAYMENT WHEN IT HAS BEEN COMPLETED
-    static async updateBookingPaymeent(body) {
-        const resp = await axios.put(`${this.BASE_URL}/payments/update`, body, {
-            headers: this.getHeader()
-        });
-        return resp.data;
-    }
-
-
-
     //AUTHENTICATION CHECKER
     static logout(){
         this.clearAuth();
