@@ -32,3 +32,4 @@ yarn-error.log*
 
 # Runtime-uploaded room images (uploaded via admin panel, not tracked in git)
 /public/rooms/
+tests/.auth/
