@@ -35,14 +35,13 @@ const FindBookingPage = () => {
                 />
                 <button onClick={handleSearch}>Find</button>
             </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
             {bookingDetails && (
                 <div className="booking-details">
                     <h3>Booking Details</h3>
                     <p>Booking Code: {bookingDetails.bookingReference}</p>
                     <p>Check-in Date: {bookingDetails.checkInDate}</p>
                     <p>Check-out Date: {bookingDetails.checkOutDate}</p>
-                    <p>Payment Status: {bookingDetails.paymentStatus}</p>
                     <p>Amount: {bookingDetails.totalPrice}</p>
                     <p>Booking Status: {bookingDetails.bookingStatus}</p>
 

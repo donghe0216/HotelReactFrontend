@@ -74,7 +74,7 @@ const RoomSearch = ({ handSearchResult }) => {
 
       if (resp.status === 200) {
         if (resp.rooms.length === 0) {
-          showError("Room type not cuttently available for the selected date");
+          showError("Room type not currently available for the selected date");
           return;
         }
         handSearchResult(resp.rooms);
@@ -101,7 +101,7 @@ return (
           />
   
           {isStartDatePickerVisible && (
-            <div className="datepicker-container" ref={startDateRef}>
+            <div className="datepicker-container search-checkin-picker" ref={startDateRef}>
               <DayPicker
                 selected={startDate}
                 onDayClick={(date) => {
@@ -127,7 +127,7 @@ return (
           />
   
           {isEndDatePickerVisible && (
-            <div className="datepicker-container" ref={endDateRef}>
+            <div className="datepicker-container search-checkout-picker" ref={endDateRef}>
               <DayPicker
                 selected={endDate}
                 onDayClick={(date) => {
@@ -154,11 +154,11 @@ return (
         </div>
   
         <button className="home-search-button" onClick={handleInternalSearch}>
-          Search Roooms
+          Search Rooms
         </button>
       </div>
   
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className="error-message search-error-message">{error}</p>}
     </section>
   );
 };

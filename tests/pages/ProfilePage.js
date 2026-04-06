@@ -12,7 +12,7 @@ export class ProfilePage {
   constructor(page) {
     this.page = page;
 
-    this.welcomeHeading    = page.locator(".profile-page h2");
+    this.welcomeHeading    = page.getByRole("heading", { level: 2 });
     this.editProfileButton = page.locator("button.edit-profile-button");
     this.logoutButton      = page.locator("button.logout-button");
     this.profileDetails    = page.locator(".profile-details");
