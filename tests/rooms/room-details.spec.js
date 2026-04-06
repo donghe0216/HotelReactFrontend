@@ -194,7 +194,6 @@ test.describe("🛏️ Room Details & Booking Flow", () => {
               checkInDate: checkIn,
               checkOutDate: checkOut,
               totalPrice: 300,
-              paymentStatus: "PENDING",
             },
           }),
         });
