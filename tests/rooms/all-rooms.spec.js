@@ -1,5 +1,10 @@
 // tests/rooms/all-rooms.spec.js
 // Project: chromium-public (no login needed / ログイン不要)
+//
+// TC-AR-01~06  All Rooms Page — filter and navigation
+// TC-AR-08~13  RoomSearch component — date picker and search
+// TC-AR-07     Pagination — placed at the bottom because it requires
+//              beforeAll/afterAll API setup to seed 10+ rooms
 
 import { test, expect, request as playwrightRequest } from "@playwright/test";
 import { AllRoomsPage } from "../pages/AllRoomsPage.js";

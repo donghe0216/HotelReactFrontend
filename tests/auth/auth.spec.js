@@ -2,7 +2,7 @@
 // Project: chromium-public (no auth required)
 //
 // TC-AUTH-01~04  Login page
-// TC-AUTH-05~09  Register page
+// TC-AUTH-05~08  Register page
 
 import { test, expect } from "@playwright/test";
 import { LoginPage }    from "../pages/LoginPage.js";
