@@ -56,13 +56,10 @@ const ManageRoomPage = () => {
     }
 
 
-    //pagination calculation
     const indexOfLastRoom = currentPage * roomsPerPage;
     const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
     const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
 
-
-    //change page
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (

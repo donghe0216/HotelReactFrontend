@@ -22,13 +22,13 @@ function Navbar() {
     return(
         <nav className="navbar">
             <div className="navbar-brand">
-                <NavLink to="/home"> Phegon Hotel </NavLink>
+                <NavLink to="/home"> TOKYO HOTEL </NavLink>
             </div>
 
             <ul className="navbar-ul">
                 <li><NavLink to={"/home"} activeClassname="active">Home</NavLink></li>
-                <li><NavLink to={"/rooms"} activeClassname="active">Rooms</NavLink></li>
-                <li><NavLink to={"/find-booking"} activeClassname="active">Find My Bookings</NavLink></li>
+                {!isAdmin && <li><NavLink to={"/rooms"} activeClassname="active">Rooms</NavLink></li>}
+                {!isAdmin && <li><NavLink to={"/find-booking"} activeClassname="active">Find My Bookings</NavLink></li>}
 
                 { isCustomer && <li><NavLink to={"/profile"} activeClassname="active">Profile</NavLink></li>}
                 {isAdmin && <li><NavLink to={"/admin"} activeClassname="active">Admin</NavLink></li>}

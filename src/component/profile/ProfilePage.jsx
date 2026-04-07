@@ -13,7 +13,6 @@ const ProfilePage = () => {
             try {
                 const myProfileResponse = await ApiService.myProfile();
                 setUser(myProfileResponse.user)
-                // Fetch user bookings using the fetched user ID
                 const myBookingResponse = await ApiService.myBookings();
                 setBookings(myBookingResponse.bookings)
 
@@ -32,6 +31,17 @@ const ProfilePage = () => {
 
     const handleEditProfile = () => {
         navigate('/edit-profile');
+    };
+
+    const handleCancelBooking = async (bookingId) => {
+        if (!window.confirm('Are you sure you want to cancel this booking?')) return;
+        try {
+            await ApiService.cancelBooking(bookingId);
+            const myBookingResponse = await ApiService.myBookings();
+            setBookings(myBookingResponse.bookings);
+        } catch (err) {
+            setError(err.response?.data?.message || err.message);
+        }
     };
 
     return (
@@ -64,6 +74,16 @@ const ProfilePage = () => {
                                 <p><strong>Room Number:</strong> {booking.room.roomNumber}</p>
                                 <p><strong>Room Type:</strong> {booking.room.type}</p>
                                 <img src={booking.room.imageUrl} alt="Room" className="room-photo" />
+                                {/* Cancellation is only allowed before the check-in date (not on the same day) */}
+                                {booking.bookingStatus === 'BOOKED' &&
+                                    new Date(booking.checkInDate) > new Date() && (
+                                    <button
+                                        className="cancel-booking-button"
+                                        onClick={() => handleCancelBooking(booking.id)}
+                                    >
+                                        Cancel Booking
+                                    </button>
+                                )}
                             </div>
                         ))
                     ) : (

@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ApiService from "../../service/ApiService"; // Import API service
+import ApiService from "../../service/ApiService";
 
 const EditBookingPage = () => {
 
-  const { bookingCode } = useParams(); // Retrieve booking reference from URL
+  const { bookingCode } = useParams();
   const navigate = useNavigate();
 
-  const [bookingDetails, setBookingDetails] = useState(null); // Store booking details
+  const [bookingDetails, setBookingDetails] = useState(null);
 
   const [formState, setFormState] = useState({
     id:"",
     bookingStatus: "",
     paymentStatus: "",
-  }); // Form for updating status
+  });
 
-  const [message, setMessage] = useState({ type: "", text: "" }); // For error/success messages
+  const [message, setMessage] = useState({ type: "", text: "" });
 
-  // Fetch booking details on component mount
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
@@ -39,13 +38,11 @@ const EditBookingPage = () => {
     fetchBookingDetails();
   }, [bookingCode]);
 
-  // Handle input changes for bookingStatus and paymentStatus
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle update submission
   const handleUpdate = async () => {
     if (!formState.bookingStatus && !formState.paymentStatus) {
       setMessage({ type: "error", text: "Please update at least one field." });
@@ -61,9 +58,6 @@ const EditBookingPage = () => {
         navigate("/admin/manage-bookings");
       }, 3000);
     } catch (error) {
-
-        console.log(error);
-
       setMessage({
         type: "error",
         text: error.response?.data?.message || error.message,
@@ -71,17 +65,14 @@ const EditBookingPage = () => {
     }
   };
 
-  // Render the component
   return (
     <div className="edit-booking-page">
       <h2>Update Booking</h2>
 
-      {/* Display success or error messages */}
       {message.text && (
         <p className={`${message.type}-message`}>{message.text}</p>
       )}
 
-      {/* Render booking details and update form */}
       {bookingDetails ? (
         <div className="booking-details">
           <h3>Booking Details</h3>
@@ -98,6 +89,7 @@ const EditBookingPage = () => {
           <h3>User Who Made The Booking</h3>
           <div>
             <p> First Name: {bookingDetails.user.firstName}</p>
+            {/* BUG: label says "First Name" but renders lastName */}
             <p> First Name: {bookingDetails.user.lastName}</p>
             <p> Email: {bookingDetails.user.email}</p>
             <p> Phone Number: {bookingDetails.user.phoneNumber}</p>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import ApiService from '../../service/ApiService'; // Assuming your service is in a file called ApiService.js
+import ApiService from '../../service/ApiService';
 
 const FindBookingPage = () => {
-    const [confirmationCode, setConfirmationCode] = useState(''); // State variable for confirmation code
-    const [bookingDetails, setBookingDetails] = useState(null); // State variable for booking details
-    const [error, setError] = useState(null); // Track any errors
+    const [confirmationCode, setConfirmationCode] = useState('');
+    const [bookingDetails, setBookingDetails] = useState(null);
+    const [error, setError] = useState(null);
 
     const handleSearch = async () => {
         if (!confirmationCode.trim()) {
@@ -13,10 +13,9 @@ const FindBookingPage = () => {
             return;
         }
         try {
-            // Call API to get booking details
             const response = await ApiService.getBookingByReference(confirmationCode);
             setBookingDetails(response.booking);
-            setError(null); // Clear error if successful
+            setError(null);
         } catch (error) {
             setError(error.response?.data?.message || error.message);
             setTimeout(() => setError(''), 5000);
@@ -50,6 +49,7 @@ const FindBookingPage = () => {
                     <br />
                     <hr />
                     <br />
+                    {/* BUG TC-FB-09: "Detials" is a typo — should be "Details" */}
                     <h3>Booker Detials</h3>
                     <div>
                         <p> First Name: {bookingDetails.user.firstName}</p>

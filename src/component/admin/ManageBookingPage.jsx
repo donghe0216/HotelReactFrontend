@@ -4,28 +4,17 @@ import ApiService from '../../service/ApiService';
 import Pagination from '../common/Pagination';
 
 const ManageBookingsPage = () => {
-  // State to store all bookings fetched from the API
   const [bookings, setBookings] = useState([]);
-
-  // State to hold the current search term entered by the user
   const [searchTerm, setSearchTerm] = useState('');
-
-  // State to track the current page for pagination
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Number of bookings to display per page
   const bookingsPerPage = 10;
-
-  // Hook to navigate between pages
   const navigate = useNavigate();
 
-  // Fetch bookings when the component is mounted
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        // API call to fetch all bookings
         const response = await ApiService.getAllBookings();
-        setBookings(response.bookings || []); // Set bookings or an empty array if no data
+        setBookings(response.bookings || []);
       } catch (error) {
         console.error('Error fetching bookings:', error.message);
       }
@@ -34,39 +23,29 @@ const ManageBookingsPage = () => {
     fetchBookings();
   }, []);
 
-  /**
-   * useMemo is used to memoize filtered bookings.
-   * - Filters bookings based on the search term (case-insensitive).
-   * - Updates only when `searchTerm` or `bookings` change.
-   */
+  // Memoized to avoid refiltering on unrelated re-renders
   const filteredBookings = useMemo(() => {
-    if (!searchTerm) return bookings; // If no search term, show all bookings
+    if (!searchTerm) return bookings;
     return bookings.filter((booking) =>
       booking.bookingReference?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [searchTerm, bookings]);
 
-  /**
-   * Calculate the bookings to display on the current page.
-   * - Updates when `currentPage`, `filteredBookings`, or `bookingsPerPage` changes.
-   */
   const currentBookings = useMemo(() => {
     const indexOfLastBooking = currentPage * bookingsPerPage;
     const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
     return filteredBookings.slice(indexOfFirstBooking, indexOfLastBooking);
   }, [currentPage, filteredBookings, bookingsPerPage]);
 
-  // Update search term when user types in the input field
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page when search term changes
+    setCurrentPage(1); // Reset to first page so results always start from the top
   };
 
   return (
     <div className="bookings-container">
       <h2>All Bookings</h2>
 
-      {/* Search bar to filter bookings */}
       <div className="search-div">
         <label>Filter by Booking Number:</label>
         <input
@@ -77,7 +56,6 @@ const ManageBookingsPage = () => {
         />
       </div>
 
-      {/* Display bookings for the current page */}
       <div className="booking-results">
         {currentBookings.map((booking) => (
           <div key={booking.id} className="booking-result-item">
@@ -97,7 +75,6 @@ const ManageBookingsPage = () => {
         ))}
       </div>
 
-      {/* Pagination component */}
       <Pagination
         roomPerPage={bookingsPerPage}
         totalRooms={filteredBookings.length}

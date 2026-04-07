@@ -16,14 +16,11 @@ const RegisterPage = () => {
     const [message, setMessage] = useState({type: "", text: ""});
     const navigate = useNavigate();
 
-    //handle inouyt change
-    const handleInputChange = ({target: {name, value}}) => 
+    const handleInputChange = ({target: {name, value}}) =>
         setFormData((prev) => ({... prev, [name]:value}));
 
-    //validate from field
     const isFormValid = Object.values(formData).every((field) => field.trim());
 
-    //handle form submissiion
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isFormValid) {
