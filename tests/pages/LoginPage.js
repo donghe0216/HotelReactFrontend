@@ -17,7 +17,7 @@ export class LoginPage {
     this.passwordInput = page.locator('input[name="password"]');
     this.submitButton  = page.getByRole("button", { name: /login/i });
     this.errorMessage  = page.locator(".error-message");
-    this.registerLink  = page.locator('a[href="/register"]');
+    this.registerLink  = page.locator('.auth-container a[href="/register"]');
   }
 
   // ── Actions ───────────────────────────────────────────────────

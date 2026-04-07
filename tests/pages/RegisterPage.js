@@ -20,7 +20,7 @@ export class RegisterPage {
     this.submitButton     = page.getByRole("button", { name: /register/i });
     this.successMessage   = page.locator(".success-message");
     this.errorMessage     = page.locator(".error-message");
-    this.loginLink        = page.locator('a[href="/login"]');
+    this.loginLink        = page.locator('.auth-container a[href="/login"]');
   }
 
   async goto() {
