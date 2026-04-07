@@ -9,7 +9,6 @@ const RoomSearch = ({ handSearchResult }) => {
   const [roomTypes, setRoomTypes] = useState([]);
   const [error, setError] = useState("");
 
-  //state for controlling calander visibility
   const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
 
@@ -37,6 +36,7 @@ const RoomSearch = ({ handSearchResult }) => {
     }
   };
 
+  // Close date pickers when user clicks outside their containers
   useEffect(() => {
     document.addEventListener("mousedown", haandleClickOutside);
     return () => {
@@ -44,7 +44,6 @@ const RoomSearch = ({ handSearchResult }) => {
     };
   }, []);
 
-  //shoe error
   const showError = (message, timeout = 5000) => {
     setError(message);
     setTimeout(() => {
@@ -52,7 +51,6 @@ const RoomSearch = ({ handSearchResult }) => {
     }, timeout);
   };
 
-  //this will fetch the rooms avialbale from our api
   const handleInternalSearch = async () => {
     if (!startDate || !endDate || !roomType) {
       showError("Please select fields");
@@ -92,7 +90,6 @@ return (
     <section>
       <div className="search-container">
   
-          {/* checkj in date and calander field */}
         <div className="search-field" style={{ position: "relative" }}>
           <label>Check-in Date</label>
           <input
@@ -119,7 +116,6 @@ return (
   
   
           
-          {/* checkj out date and calander field */}
         <div className="search-field" style={{ position: "relative" }}>
           <label>Check-Out Date</label>
           <input
@@ -157,7 +153,6 @@ return (
           </select>
         </div>
   
-        {/* SEARCH BUTTON */}
         <button className="home-search-button" onClick={handleInternalSearch}>
           Search Roooms
         </button>

@@ -4,41 +4,35 @@ import CryptoJS from "crypto-js";
 export default class ApiService {
 
     static BASE_URL = "http://localhost:9090/api";
+    // Hardcoded key is intentional for local dev/demo; must be moved to env var before any real deployment
     static ENCRYPTION_KEY = "dennis-secrete-key";
-
-    //enctyp token using cruyptojs
 
     static encrypt(token) {
         return CryptoJS.AES.encrypt(token, this.ENCRYPTION_KEY.toString());
     }
 
-    //deceype token using cruyptojs
     static decrypt(token) {
         const bytes = CryptoJS.AES.decrypt(token, this.ENCRYPTION_KEY);
         return bytes.toString(CryptoJS.enc.Utf8);
     }
 
-    //save token
     static saveToken(token) {
         const encrytpedToken = this.encrypt(token);
         localStorage.setItem("token", encrytpedToken);
     }
 
-    //retreive token
     static getToken() {
         const encrytpedToken = localStorage.getItem("token");
         if (!encrytpedToken) return null;
         return this.decrypt(encrytpedToken)
     }
 
-    //save role
     static saveRole(role) {
         const encrytpedRole = this.encrypt(role);
         localStorage.setItem("role", encrytpedRole);
     }
 
 
-    //get role
     static getRole() {
         const encrytpedRole = localStorage.getItem("role");
         if (!encrytpedRole) return null;
@@ -100,25 +94,23 @@ export default class ApiService {
         const resp = await axios.post(`${this.BASE_URL}/rooms/add`, formData, {
             headers: {
                 ...this.getHeader(),
+                // Override to multipart/form-data so axios sets the correct boundary for file upload
                 'Content-Type': 'multipart/form-data'
             }
         });
         return resp.data;
     }
 
-    //to get room types
     static async getRoomTypes() {
         const resp = await axios.get(`${this.BASE_URL}/rooms/types`);
         return resp.data;
     }
 
-    //to get all rooms
     static async getAllRooms() {
         const resp = await axios.get(`${this.BASE_URL}/rooms/all`);
         return resp.data;
     }
 
-    //To get room details
     static async getRoomById(roomId) {
         const resp = await axios.get(`${this.BASE_URL}/rooms/${roomId}`);
         return resp.data;
@@ -135,6 +127,7 @@ export default class ApiService {
         const resp = await axios.put(`${this.BASE_URL}/rooms/update`, formData, {
             headers: {
                 ...this.getHeader(),
+                // Override to multipart/form-data so axios sets the correct boundary for file upload
                 'Content-Type': 'multipart/form-data'
             }
         });
@@ -142,9 +135,6 @@ export default class ApiService {
     }
 
     static async getAvailableRooms(checkInDate, checkOutDate, roomType) {
-
-        console.log("checkInDate from api: " + checkInDate)
-        console.log("checkOutDate from api: " + checkOutDate)
 
         const resp = await axios.get(`${this.BASE_URL}/rooms/available?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&roomType=${roomType}`);
         return resp.data;
@@ -174,6 +164,14 @@ export default class ApiService {
 
     static async updateBooking(booking) {
         const resp = await axios.put(`${this.BASE_URL}/bookings/update`, booking, {
+            headers: this.getHeader()
+        });
+        return resp.data;
+    }
+
+    // Cancellation is only allowed before the check-in date (not on the same day).
+    static async cancelBooking(bookingId) {
+        const resp = await axios.post(`${this.BASE_URL}/bookings/${bookingId}/cancel`, {}, {
             headers: this.getHeader()
         });
         return resp.data;

@@ -12,7 +12,6 @@ const EditProfilePage = () => {
             try {
                 const response = await ApiService.myProfile();
                 setUser(response.user);
-                console.log(response.user)
             } catch (error) {
                 setError(error.message);
             }
@@ -27,6 +26,7 @@ const EditProfilePage = () => {
         }
         try {
             await ApiService.deleteAccount();
+            // BUG TC-EDIT-05: /signup does not exist; should redirect to /register
             navigate('/signup');
         } catch (error) {
             setError(error.response?.data?.message || error.message);
@@ -34,6 +34,7 @@ const EditProfilePage = () => {
     };
 
     return (
+        // BUG TC-EDIT-02: page only displays user data with no editable inputs — edit functionality is missing
         <div className="edit-profile-page">
             <h2>Edit Profile</h2>
             {error && <p className="error-message">{error}</p>}

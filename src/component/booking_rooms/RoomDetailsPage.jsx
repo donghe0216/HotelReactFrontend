@@ -7,7 +7,6 @@ const RoomDetailsPage = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
 
-  //state management
   const [room, setRoom] = useState(null);
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
@@ -19,15 +18,11 @@ const RoomDetailsPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
 
-  //fetch room details
-
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
         const resp = await ApiService.getRoomById(roomId);
         setRoom(resp.room);
-
-        console.log(resp);
       } catch (error) {
         console.log(error);
       }
@@ -35,22 +30,20 @@ const RoomDetailsPage = () => {
     fetchRoomDetails();
   }, []);
 
-  //Calculate total price
   const calculateTotalPrice = () => {
     if (!checkInDate || !checkOutDate) return 0;
 
-    const oneDay = 24 * 60 * 60 * 1000; ///this is number in milisec
+    const oneDay = 24 * 60 * 60 * 1000;
 
     const totalDays = Math.round(
       Math.abs((new Date(checkOutDate) - new Date(checkInDate)) / oneDay)
-    ); //give the difference in millsec
+    );
 
     setTotalDaysToStay(totalDays);
 
     return room?.pricePerNight * totalDays || 0;
   };
 
-  //handle booking confirmation
   const handleConfirmation = () => {
     if (!checkInDate || !checkOutDate) {
       setErrorMessage("Please select both check-in and check-out dates");
@@ -63,7 +56,6 @@ const RoomDetailsPage = () => {
   };
 
   const acceptBooking = async () => {
-    console.log("Inside acceptBooking()");
     try {
       const formattedCheckInDate = checkInDate.toLocaleDateString("en-CA");
       const formatterdCheckOutDate = checkOutDate.toLocaleDateString("en-CA");

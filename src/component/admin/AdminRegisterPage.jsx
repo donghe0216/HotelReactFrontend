@@ -17,14 +17,11 @@ const AdminRegisterPage = () => {
     const [message, setMessage] = useState({type: "", text: ""});
     const navigate = useNavigate();
 
-    //handle inouyt change
-    const handleInputChange = ({target: {name, value}}) => 
+    const handleInputChange = ({target: {name, value}}) =>
         setFormData((prev) => ({... prev, [name]:value}));
 
-    //validate from field
     const isFormValid = Object.values(formData).every((field) => field.trim());
 
-    //handle form submissiion
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isFormValid) {
@@ -33,14 +30,7 @@ const AdminRegisterPage = () => {
             return;
         }
 
-        // THIS OR BELOW WILL WORK
-        // if (!ApiService.myProfile().user.role === "ADMIN") {
-        //     setMessage({type: "error", text: "Anautorizedm Admin Page only"})
-        //     setTimeout(()=> setMessage({}), 5000);
-        //     return;
-            
-        // }
-
+        // Client-side guard only — the route is also protected by AdminRoute; backend relies on JWT role claim
         if (!ApiService.isAdmin()) {
             setMessage({type: "error", text: "Anautorizedm Admin Page only"})
             setTimeout(()=> setMessage({}), 5000);

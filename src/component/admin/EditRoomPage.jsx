@@ -19,14 +19,13 @@ const EditRoomPage = () => {
   });
 
 
-  const [roomTypes, setRoomTypes] = useState([]); // Store room types
+  const [roomTypes, setRoomTypes] = useState([]);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   
-  // Fetch room details and room types
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +40,7 @@ const EditRoomPage = () => {
         });
 
         const typesResponse = await ApiService.getRoomTypes();
-        setRoomTypes(typesResponse); // Set available room types
+        setRoomTypes(typesResponse);
       } catch (error) {
         setError(error.response?.data?.message || error.message);
       }

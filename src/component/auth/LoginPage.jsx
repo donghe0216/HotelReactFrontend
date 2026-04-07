@@ -15,7 +15,6 @@ const LoginPage = () => {
 
   const redirectPath = state?.from?.pathname || "/home";
 
-  //handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

@@ -20,7 +20,8 @@ const AddRoomPage = () => {
   const [success, setSuccess] = useState("");
   const [roomTypes, setRoomTypes] = useState([]);
 
-  const [newRoomType, setNewRoomType] = useState("");  // State to handle new room type input
+  // newRoomType and handleNewRoomTypeChange are defined but never wired to the form — custom type input was not implemented
+  const [newRoomType, setNewRoomType] = useState("");
 
   useEffect(() => {
     const fetchRoomTypes = async () => {
