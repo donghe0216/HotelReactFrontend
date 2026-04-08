@@ -154,6 +154,9 @@ test.describe("🛏️ Room Details & Booking Flow", () => {
     const totalMatch  = previewText.match(/total price.*?\$(\d+(?:\.\d+)?)/i);
     const totalPrice  = totalMatch ? parseFloat(totalMatch[1]) : null;
 
+    // Soft assertion: only runs when both values are parseable from the DOM.
+    // If the price format changes, this test silently passes rather than failing —
+    // price calculation correctness is covered in BookingServiceImplTest.java.
     if (pricePerNight && totalPrice) {
       expect(totalPrice).toBe(pricePerNight * 2);
     }

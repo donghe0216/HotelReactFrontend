@@ -87,8 +87,9 @@ test.describe("👤 Profile Page", () => {
 
     const count = await profilePage.getBookingCount();
 
+    // Branching on runtime state: seed data may or may not include bookings for this account.
+    // TC-PRO-06 covers the guaranteed zero-booking case with a fresh user.
     if (count > 0) {
-      // Check that each booking-item shows the required fields
       const firstItem = profilePage.bookingItems.first();
       const itemText  = await firstItem.textContent();
       expect(itemText).toMatch(/booking code/i);
