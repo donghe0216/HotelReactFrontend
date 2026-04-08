@@ -71,7 +71,6 @@ test.describe("🛏️ Room Details & Booking Flow", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-RD-01  page loads with room type, price, and capacity info
-  // ページ読み込み：部屋情報が正しく表示されるか確認
   // ─────────────────────────────────────────────────────────────
   test("TC-RD-01 | page loads with room type, price, and capacity info", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "chromium", "Requires customer auth");
@@ -118,7 +117,6 @@ test.describe("🛏️ Room Details & Booking Flow", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-RD-04  selecting valid dates and clicking Proceed shows booking preview
-  // 日付選択 → Proceed → 予約プレビュー表示の確認
   // ─────────────────────────────────────────────────────────────
   test("TC-RD-04 | selecting check-in and check-out dates shows booking preview", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "chromium", "Requires customer auth");
@@ -180,7 +178,6 @@ test.describe("🛏️ Room Details & Booking Flow", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-RD-07  full booking flow: select dates → Proceed → Confirm → show confirmation
-  // 予約フロー全体：日付選択 → Proceed → Confirm → 確認メッセージ表示
   //
   // Note: the component does not auto-navigate to /rooms after booking.
   // It shows "Booking Confirmed!" with a "Back to Rooms" button instead.

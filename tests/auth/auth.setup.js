@@ -4,7 +4,7 @@
 // Logs in as customer and admin, then saves localStorage (JWT + role) to files.
 // Other tests just load the saved state — no need to go through login every time.
 //
-// ログイン状態をファイルに保存 → 各テストで再ログイン不要
+// Saves auth state to file so other tests can skip the login step
 
 import { test as setup, expect } from "@playwright/test";
 import fs from "fs";
@@ -26,7 +26,7 @@ const BOOKING_FILE   = path.join(AUTH_DIR, "booking.json");
 if (!fs.existsSync(AUTH_DIR)) fs.mkdirSync(AUTH_DIR, { recursive: true });
 
 // Shared login helper — fills the form and waits for redirect to /home
-// ログインフォームを送信して /home へのリダイレクトを待つ
+// Fills the login form and waits for redirect to /home
 async function loginAs(page, { email, password }) {
   await page.goto("/login");
 
@@ -38,14 +38,14 @@ async function loginAs(page, { email, password }) {
 }
 
 // Setup 1: save customer auth state
-// セットアップ1: カスタマーのログイン状態を保存
+// Setup 1: save customer auth state
 setup("authenticate as customer", async ({ page }) => {
   await loginAs(page, CUSTOMER);
   await page.context().storageState({ path: CUSTOMER_FILE });
 });
 
 // Setup 2: save admin auth state
-// セットアップ2: 管理者のログイン状態を保存
+// Setup 2: save admin auth state
 setup("authenticate as admin", async ({ page }) => {
   await loginAs(page, ADMIN);
   await page.context().storageState({ path: ADMIN_FILE });
@@ -55,7 +55,7 @@ setup("authenticate as admin", async ({ page }) => {
 // Uses Playwright request API (no browser) to call the real backend.
 // Writes the booking reference to a file so find-booking.spec.js can read it.
 // If this fails, TC-FB-06~09 will be skipped safely via test.skip.
-// セットアップ3: find-booking テスト用の予約を作成
+// Setup 3: create a seed booking for find-booking tests
 setup("create seed booking", async ({ request }) => {
   // 1. Login via API to get JWT
   const loginRes = await request.post(`${API_BASE}/auth/login`, {

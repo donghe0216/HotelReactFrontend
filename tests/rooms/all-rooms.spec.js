@@ -1,5 +1,5 @@
 // tests/rooms/all-rooms.spec.js
-// Project: chromium-public (no login needed / ログイン不要)
+// Project: chromium-public (no login needed)
 //
 // Covers: room list rendering, room type filter, RoomSearch component
 //         (date picker open/close, date selection, availability search), pagination.
@@ -24,7 +24,6 @@ test.describe("🏠 All Rooms Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-AR-01  page loads with room list and filter controls
-  // ページ読み込み：部屋一覧とフィルターが表示されるか確認
   // ─────────────────────────────────────────────────────────────
   test("TC-AR-01 | page loads with heading, filter dropdown, and room list", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
@@ -52,7 +51,6 @@ test.describe("🏠 All Rooms Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-AR-03  selecting a room type filters the list correctly
-  // フィルター選択 → 該当タイプのみ表示されるか確認
   // ─────────────────────────────────────────────────────────────
   test("TC-AR-03 | selecting SINGLE type shows only SINGLE rooms", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);

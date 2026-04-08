@@ -8,7 +8,6 @@
 //
 // Note: despite the name, EditProfile.jsx has no edit form at all.
 // It only shows user info + a delete account button.
-// 「EditProfile」という名前なのに編集フォームが存在しない（バグ）。
 
 export class EditProfilePage {
   constructor(page) {

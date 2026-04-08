@@ -1,5 +1,5 @@
 // tests/profile/profile.spec.js
-// Project: chromium (requires customer storageState / カスタマーのログイン状態が必要)
+// Project: chromium (requires customer storageState)
 //
 // Covers: profile info display, logout behavior, booking history rendering,
 //         account deletion flow, edit profile page (including known bugs).
@@ -60,7 +60,6 @@ test.describe("👤 Profile Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-PRO-04  clicking Logout clears the token and redirects to /home
-  // ログアウト → token 削除 → /home へリダイレクト
   // ─────────────────────────────────────────────────────────────
   test("TC-PRO-04 | clicking Logout clears token and redirects to /home", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
@@ -77,7 +76,6 @@ test.describe("👤 Profile Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-PRO-05  booking list shows when user has past bookings
-  // 予約あり：booking-item が表示されるか確認
   // ─────────────────────────────────────────────────────────────
   test("TC-PRO-05 | booking list shows when user has past bookings", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
@@ -104,7 +102,6 @@ test.describe("👤 Profile Page", () => {
   // ─────────────────────────────────────────────────────────────
   test("TC-PRO-06 | new user with no bookings sees 'No bookings found.'", async ({ browser }) => {
     // Fresh context: register + login a brand-new user
-    // 新規ユーザー（予約なし）でログインして確認
     const context = await browser.newContext();
     const page    = await context.newPage();
 
@@ -258,7 +255,7 @@ test.describe("✏️ Edit Profile Page", () => {
   // TC-EDIT-05  [Bug] after delete, app navigates to /signup which does not exist
   //
   //   EditProfile.jsx calls navigate('/signup') but /signup has no route in App.js.
-  //   削除後に /signup へ遷移するが、そのルートは存在しない。
+  //   After deletion, the app navigates to /signup which has no route.
   //   Should be navigate('/register') or navigate('/home').
   // ─────────────────────────────────────────────────────────────
   test("TC-EDIT-05 | [Bug] after delete, navigates to /signup which does not exist", async ({ browser }) => {

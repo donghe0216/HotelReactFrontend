@@ -1,5 +1,5 @@
 // tests/booking/find-booking.spec.js
-// Project: chromium-public (/find-booking does not require login / ログイン不要)
+// Project: chromium-public (/find-booking does not require login)
 //
 // Covers: booking reference lookup — input validation, backend error handling,
 //         correct display of booking / booker / room info.
@@ -19,7 +19,7 @@ import fs   from "fs";
 import path from "path";
 
 // Load the booking reference written by auth.setup.js
-// 予約 reference を読み込む
+// Load the booking reference written by auth.setup.js
 let SEED_BOOKING_REF = null;
 try {
   const bookingFile = path.join("tests", ".auth", "booking.json");
@@ -75,7 +75,6 @@ test.describe("🔍 Find Booking Page", () => {
 
     await expect(findPage.errorMessage).toBeVisible();
     // Use Playwright built-in polling instead of fixed sleep — more reliable.
-    // Playwright の polling を使う。固定 sleep は flaky になるため避ける。
     await expect(findPage.errorMessage).not.toBeVisible({ timeout: 10_000 });
   });
 
@@ -94,7 +93,6 @@ test.describe("🔍 Find Booking Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-FB-06  valid reference shows booking, booker, and room info
-  // 有効な予約コード → 予約・予約者・部屋の3ブロックが表示される
   // ─────────────────────────────────────────────────────────────
   test("TC-FB-06 | valid reference shows booking, booker, and room details", async ({ page }) => {
     test.skip(!SEED_BOOKING_REF, "No seed booking reference — run auth setup first");

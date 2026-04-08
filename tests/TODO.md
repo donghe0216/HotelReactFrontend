@@ -7,10 +7,6 @@
 - **Risk mitigation**: Authorization rules and CRUD operations are fully covered at the API layer (`AuthorizationTest.java`, `RoomApiTest.java`, `BookingApiTest.java`).
 - **To be added when**: Admin UI stabilizes or QA capacity allows.
 
-### Payment Flow (`payment.spec.js`)
-- **Reason**: Stripe integration requires test keys and a sandboxed payment environment; not suitable for standard E2E runs.
-- **Risk mitigation**: Payment state transitions are covered at the API layer (`IdempotencyTest.java`, `StateConsistencyTest.java`).
-- **To be added when**: Stripe test mode is wired into the CI environment.
 
 ---
 
