@@ -1,6 +1,14 @@
 // tests/auth/auth.spec.js
 // Project: chromium-public (no auth required)
 //
+// Covers: login form validation, credential verification, token storage,
+//         registration form validation, duplicate email handling.
+//
+// Out of scope:
+//   - Password strength rules (no complexity policy enforced in current build)
+//   - OAuth / social login (not implemented)
+//   - Session expiry and token refresh (covered at API layer)
+//
 // TC-AUTH-01~04  Login page
 // TC-AUTH-05~08  Register page
 

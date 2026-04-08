@@ -1,6 +1,14 @@
 // tests/rooms/all-rooms.spec.js
 // Project: chromium-public (no login needed / ログイン不要)
 //
+// Covers: room list rendering, room type filter, RoomSearch component
+//         (date picker open/close, date selection, availability search), pagination.
+//
+// Out of scope:
+//   - Room CRUD (add / edit / delete) — admin operations covered in API layer
+//   - Booking flow from room card — covered in room-details.spec.js
+//   - Availability logic correctness — covered in BookingServiceImplTest.java
+//
 // TC-AR-01~06  All Rooms Page — filter and navigation
 // TC-AR-08~13  RoomSearch component — date picker and search
 // TC-AR-07     Pagination — placed at the bottom because it requires

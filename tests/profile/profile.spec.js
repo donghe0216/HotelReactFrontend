@@ -1,5 +1,13 @@
 // tests/profile/profile.spec.js
 // Project: chromium (requires customer storageState / カスタマーのログイン状態が必要)
+//
+// Covers: profile info display, logout behavior, booking history rendering,
+//         account deletion flow, edit profile page (including known bugs).
+//
+// Out of scope:
+//   - Profile update API correctness (covered in UserApiTest.java)
+//   - Password change (not implemented in current build)
+//   - Admin-initiated user management (covered in AuthorizationTest.java)
 
 import { test, expect } from "@playwright/test";
 import { ProfilePage }     from "../pages/ProfilePage.js";

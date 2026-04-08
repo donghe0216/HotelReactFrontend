@@ -2,6 +2,14 @@
 //
 // Project: chromium（requires customer storageState from auth.setup.js）
 //
+// Covers: room info display, date picker interaction, booking preview,
+//         price calculation, full booking confirmation flow, auth guard redirect.
+//
+// Out of scope:
+//   - Booking cancellation after confirmation (covered in BookingApiTest.java)
+//   - Concurrent booking conflicts (covered in ConcurrentBookingTest.java)
+//   - Authorization — customer vs admin access (covered in AuthorizationTest.java)
+//
 // TC-RD-01~08 require authentication (CustomerRoute guard).
 // TC-RD-09 always creates a fresh unauthenticated context.
 

@@ -1,9 +1,16 @@
 // tests/booking/find-booking.spec.js
 // Project: chromium-public (/find-booking does not require login / ログイン不要)
 //
+// Covers: booking reference lookup — input validation, backend error handling,
+//         correct display of booking / booker / room info.
+//
+// Out of scope:
+//   - Booking creation and cancellation (covered in room-details.spec.js and API layer)
+//   - Authorization rules — who can view whose booking (covered in AuthorizationTest.java)
+//
 // Pre-condition:
 //   The "create seed booking" step in auth.setup.js must run first.
-//   If tests/.auth/booking.json has a bookingReference, TC-FB-06~09 will use it.
+//   If tests/.auth/booking.json has a bookingReference, TC-FB-06~08 will use it.
 //   If the file does not exist, those tests are safely skipped via test.skip.
 
 import { test, expect } from "@playwright/test";
