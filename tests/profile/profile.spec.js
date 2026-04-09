@@ -160,7 +160,6 @@ test.describe("✏️ Edit Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const editPage = new EditProfilePage(page);
     await editPage.goto();
-    await editPage.waitForProfileToLoad();
 
     await expect(editPage.heading).toBeVisible();
     await expect(editPage.deleteButton).toBeVisible();
@@ -180,7 +179,6 @@ test.describe("✏️ Edit Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const editPage = new EditProfilePage(page);
     await editPage.goto();
-    await editPage.waitForProfileToLoad();
 
     // Bug: none of these inputs exist — editing is not implemented
     test.fail();
@@ -200,7 +198,6 @@ test.describe("✏️ Edit Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const editPage = new EditProfilePage(page);
     await editPage.goto();
-    await editPage.waitForProfileToLoad();
 
     // Monitor outgoing requests to detect whether the update API is called
     let updateCalled = false;
@@ -223,7 +220,6 @@ test.describe("✏️ Edit Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const editPage = new EditProfilePage(page);
     await editPage.goto();
-    await editPage.waitForProfileToLoad();
 
     let dialogMessage = "";
     page.once("dialog", async (dialog) => {
@@ -243,7 +239,6 @@ test.describe("✏️ Edit Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const editPage = new EditProfilePage(page);
     await editPage.goto();
-    await editPage.waitForProfileToLoad();
 
     await editPage.clickDeleteWithConfirm(false); // dismiss
 

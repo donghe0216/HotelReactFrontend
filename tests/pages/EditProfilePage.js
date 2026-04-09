@@ -22,11 +22,15 @@ export class EditProfilePage {
 
   async goto() {
     await this.page.goto("/edit-profile");
-    await this.page.waitForLoadState("networkidle");
+    await this.waitForProfileToLoad();
   }
 
   async waitForProfileToLoad() {
     await this.profileDetails.waitFor({ state: "visible", timeout: 10_000 });
+  }
+
+  async getProfileText() {
+    return this.profileDetails.innerText();
   }
 
   /** Accept or dismiss the delete confirmation dialog. */
