@@ -1,11 +1,8 @@
 // tests/pages/FindBookingPage.js
-// Structure based on FindBookingPage.jsx:
-//   - input            : placeholder="Enter your booking confirmation code"
-//   - Find button      : button text="Find"
-//   - booking details  : .booking-details
-//   - error message    : style="color: red" (inline style — no className)
-//   - booker details section
-//   - room details section
+//
+// /find-booking is public — no auth required.
+// Error message uses both className="error-message" and inline style color:red;
+// locating by className is sufficient and more stable than style-based selectors.
 
 export class FindBookingPage {
   constructor(page) {
@@ -24,8 +21,11 @@ export class FindBookingPage {
 
   async goto() {
     await this.page.goto("/find-booking");
+    await this.codeInput.waitFor({ state: "visible" });
   }
 
+  // No wait after click — what to wait for depends on the test scenario:
+  // success path waits via waitForBookingDetails(); error path via getErrorMessage()
   async search(code) {
     await this.codeInput.fill(code);
     await this.findButton.click();
