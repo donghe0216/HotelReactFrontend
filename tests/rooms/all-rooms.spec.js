@@ -28,7 +28,6 @@ test.describe("🏠 All Rooms Page", () => {
   test("TC-AR-01 | page loads with heading, filter dropdown, and room list", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await expect(roomsPage.heading).toBeVisible();
     await expect(roomsPage.roomTypeSelect).toBeVisible();
@@ -43,7 +42,6 @@ test.describe("🏠 All Rooms Page", () => {
   test("TC-AR-02 | room type dropdown defaults to 'All'", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     const selectedValue = await roomsPage.roomTypeSelect.inputValue();
     expect(selectedValue).toBe("");  // <option value="">All</option>
@@ -55,7 +53,6 @@ test.describe("🏠 All Rooms Page", () => {
   test("TC-AR-03 | selecting SINGLE type shows only SINGLE rooms", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     const totalBefore = await roomsPage.getRoomCardCount();
 
@@ -75,7 +72,6 @@ test.describe("🏠 All Rooms Page", () => {
   test("TC-AR-04 | switching back to All shows all rooms", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     const totalAll = await roomsPage.getRoomCardCount();
 
@@ -99,7 +95,6 @@ test.describe("🏠 All Rooms Page", () => {
     test.skip(testInfo.project.name !== "chromium", "Requires customer auth; admin navigates to edit-room instead");
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await roomsPage.clickFirstRoom();
     await expect(page).toHaveURL(/room-details\/\d+/, { timeout: 8_000 });
@@ -115,7 +110,6 @@ test.describe("🏠 All Rooms Page", () => {
   test("TC-AR-06 | selecting DOUBLE type shows only DOUBLE rooms", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await roomsPage.selectRoomType("DOUBLE");
     await expect(roomsPage.roomCards.first()).toBeVisible();
@@ -141,7 +135,6 @@ test.describe("🔍 RoomSearch Component", () => {
   test("TC-AR-08 | clicking Check-in input opens the date picker", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await roomsPage.searchCheckInInput.click();
     await expect(roomsPage.startDatePicker).toBeVisible();
@@ -153,7 +146,6 @@ test.describe("🔍 RoomSearch Component", () => {
   test("TC-AR-09 | clicking outside the date picker closes it", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await roomsPage.searchCheckInInput.click();
     await expect(roomsPage.startDatePicker).toBeVisible();
@@ -169,7 +161,6 @@ test.describe("🔍 RoomSearch Component", () => {
   test("TC-AR-10 | selecting a check-in date updates the input", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await roomsPage.searchCheckInInput.click();
     await expect(roomsPage.startDatePicker).toBeVisible();
@@ -192,7 +183,6 @@ test.describe("🔍 RoomSearch Component", () => {
   test("TC-AR-11 | clicking Search without fields shows validation error", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     await roomsPage.searchButton.click();
 
@@ -207,19 +197,10 @@ test.describe("🔍 RoomSearch Component", () => {
   test("TC-AR-12 | valid search with all fields returns available rooms", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
-    // Select check-in (day 25)
-    await roomsPage.searchCheckInInput.click();
-    await roomsPage.startDatePicker.locator("button").filter({ hasText: /^25$/ }).first().click();
-
-    // Select check-out (day 27)
-    await roomsPage.searchCheckOutInput.click();
-    await roomsPage.endDatePicker.locator("button").filter({ hasText: /^27$/ }).first().click();
-
-    // Select room type
+    await roomsPage.selectCheckInDate("25");
+    await roomsPage.selectCheckOutDate("27");
     await roomsPage.searchRoomTypeSelect.selectOption("SINGLE");
-
     await roomsPage.searchButton.click();
 
     // Room list should update with results matching the searched type
@@ -237,7 +218,6 @@ test.describe("🔍 RoomSearch Component", () => {
   test("TC-AR-13 | valid search with no available rooms shows error", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     // Mock the availability API to return empty list
     await page.route("**/rooms/available**", async (route) => {
@@ -248,15 +228,8 @@ test.describe("🔍 RoomSearch Component", () => {
       });
     });
 
-    // Select check-in (day 25)
-    await roomsPage.searchCheckInInput.click();
-    await roomsPage.startDatePicker.locator("button").filter({ hasText: /^25$/ }).first().click();
-
-    // Select check-out (day 27)
-    await roomsPage.searchCheckOutInput.click();
-    await roomsPage.endDatePicker.locator("button").filter({ hasText: /^27$/ }).first().click();
-
-    // Select room type
+    await roomsPage.selectCheckInDate("25");
+    await roomsPage.selectCheckOutDate("27");
     await roomsPage.searchRoomTypeSelect.selectOption("SINGLE");
 
     await roomsPage.searchButton.click();
@@ -327,7 +300,6 @@ test.describe("🏠 All Rooms Page — Pagination", () => {
   test("TC-AR-07 | pagination shows when more than 9 rooms exist", async ({ page }) => {
     const roomsPage = new AllRoomsPage(page);
     await roomsPage.goto();
-    await roomsPage.waitForRoomsToLoad();
 
     const count = await roomsPage.getRoomCardCount();
     expect(count).toBe(9); // page size is 9

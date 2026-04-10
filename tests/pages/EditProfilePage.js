@@ -1,6 +1,6 @@
 // tests/pages/EditProfilePage.js
 // Structure based on EditProfile.jsx:
-//   - h2               : "Edit Profile"
+//   - head               : "Edit Profile"
 //   - profile details  : .profile-details (read-only display)
 //   - delete button    : button.delete-profile-button
 //   - confirm dialog   : window.confirm (native browser dialog)
