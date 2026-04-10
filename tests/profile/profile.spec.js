@@ -22,7 +22,6 @@ test.describe("👤 Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const profilePage = new ProfilePage(page);
     await profilePage.goto();
-    await profilePage.waitForProfileToLoad();
 
     const heading = await profilePage.welcomeHeading.textContent();
     expect(heading).toMatch(/welcome/i);
@@ -39,7 +38,6 @@ test.describe("👤 Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const profilePage = new ProfilePage(page);
     await profilePage.goto();
-    await profilePage.waitForProfileToLoad();
 
     await expect(profilePage.editProfileButton).toBeVisible();
     await expect(profilePage.logoutButton).toBeVisible();
@@ -52,7 +50,6 @@ test.describe("👤 Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const profilePage = new ProfilePage(page);
     await profilePage.goto();
-    await profilePage.waitForProfileToLoad();
     await profilePage.clickEditProfile();
 
     await expect(page).toHaveURL(/edit-profile/);
@@ -65,7 +62,6 @@ test.describe("👤 Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const profilePage = new ProfilePage(page);
     await profilePage.goto();
-    await profilePage.waitForProfileToLoad();
     await profilePage.clickLogout();
 
     await expect(page).toHaveURL(/home/);
@@ -81,7 +77,6 @@ test.describe("👤 Profile Page", () => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const profilePage = new ProfilePage(page);
     await profilePage.goto();
-    await profilePage.waitForProfileToLoad();
 
     const count = await profilePage.getBookingCount();
 
