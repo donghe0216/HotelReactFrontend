@@ -11,9 +11,11 @@ export class ProfilePage {
     this.editProfileButton = page.getByRole("button", { name: /edit profile/i });
     this.logoutButton      = page.getByRole("button", { name: /logout/i });
     this.profileDetails    = page.locator(".profile-details");
-    this.bookingItems      = page.locator(".booking-item");
-    this.noBookingsMessage = page.getByText("No bookings found.");
-    this.errorMessage      = page.locator(".error-message");
+    this.bookingItems        = page.locator(".booking-item");
+    this.noBookingsMessage   = page.getByText("No bookings found.");
+    this.errorMessage        = page.locator(".error-message");
+    // Only rendered when bookingStatus === 'BOOKED' and checkInDate > today
+    this.cancelBookingButton = page.locator("button.cancel-booking-button");
   }
 
   async goto() {

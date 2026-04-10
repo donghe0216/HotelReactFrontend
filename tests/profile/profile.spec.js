@@ -2,7 +2,8 @@
 // Project: chromium (requires customer storageState)
 //
 // Covers: profile info display, logout behavior, booking history rendering,
-//         account deletion flow, edit profile page (including known bugs).
+//         account deletion flow, edit profile page (including known bugs),
+//         booking cancellation (TC-PRO-08).
 //
 // Out of scope:
 //   - Profile update API correctness (covered in UserApiTest.java)
@@ -12,6 +13,8 @@
 import { test, expect } from "@playwright/test";
 import { ProfilePage }     from "../pages/ProfilePage.js";
 import { EditProfilePage } from "../pages/EditProfilePage.js";
+import { RegisterPage }    from "../pages/RegisterPage.js";
+import { LoginPage }       from "../pages/LoginPage.js";
 
 test.describe("👤 Profile Page", () => {
 
@@ -281,6 +284,95 @@ test.describe("✏️ Edit Profile Page", () => {
     await page.waitForURL(/signup|register|home/, { timeout: 8_000 });
     const finalUrl = page.url();
     console.warn(`⚠️ After delete, navigated to: ${finalUrl} (expected /register)`);
+
+    await context.close();
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════
+// Booking Cancellation tests
+// ══════════════════════════════════════════════════════════════════
+test.describe("❌ Booking Cancellation", () => {
+
+  // ─────────────────────────────────────────────────────────────
+  // TC-PRO-08  [Bug] Cancel button on profile page has no effect
+  //
+  //   Backend POST /bookings/{id}/cancel does not exist.
+  //   Frontend sends the request but receives 404; booking status
+  //   never changes and no error is shown to the user (silent failure).
+  //
+  //   Steps:
+  //     1. Register + login a fresh user
+  //     2. Create a future booking via the REST API (seeded room required)
+  //     3. Visit /profile — booking should appear with a Cancel button
+  //     4. Click Cancel and confirm the dialog
+  //     5. Expect booking to be cancelled — fails because endpoint is missing
+  // ─────────────────────────────────────────────────────────────
+  test("TC-PRO-08 | [Bug] Cancel booking button has no effect (missing backend endpoint)", async ({ browser }) => {
+    const context  = await browser.newContext();
+    const page     = await context.newPage();
+    const email    = `cancel_test_${Date.now()}@hotel.com`;
+    const password = "CancelTest1234!";
+
+    const registerPage = new RegisterPage(page);
+    const loginPage    = new LoginPage(page);
+    const profilePage  = new ProfilePage(page);
+
+    await registerPage.goto();
+    await registerPage.register({
+      firstName: "Cancel", lastName: "Test",
+      email, phoneNumber: "09033334444", password,
+    });
+    await expect(page).toHaveURL(/login/, { timeout: 15_000 });
+
+    await loginPage.login(email, password);
+    await expect(page).toHaveURL(/home/, { timeout: 15_000 });
+
+    // Token in localStorage is encrypted by the app's ApiService and cannot
+    // be used directly — re-login via API to obtain the raw JWT.
+    const loginResp = await page.request.post("/api/auth/login", {
+      data: { email, password },
+    });
+    const rawToken = (await loginResp.json()).token;
+    expect(rawToken).toBeTruthy();
+
+    // Create booking via API rather than UI to keep the test focused on
+    // cancellation behaviour — the booking creation flow is covered separately.
+    const roomsJson = await (await page.request.get("/api/rooms/all")).json();
+    const rooms     = roomsJson.roomList ?? roomsJson.rooms ?? roomsJson;
+    expect(Array.isArray(rooms) && rooms.length > 0).toBeTruthy();
+    const roomId = rooms[0].id;
+
+    const today    = new Date();
+    const checkIn  = new Date(today); checkIn.setDate(today.getDate() + 2);
+    const checkOut = new Date(today); checkOut.setDate(today.getDate() + 4);
+    const fmt      = (d) => d.toISOString().slice(0, 10);
+
+    const bookResp = await page.request.post("/api/bookings", {
+      headers: { Authorization: `Bearer ${rawToken}`, "Content-Type": "application/json" },
+      data: { roomId, checkInDate: fmt(checkIn), checkOutDate: fmt(checkOut) },
+    });
+    expect([200, 201]).toContain(bookResp.status());
+    const bookJson  = await bookResp.json();
+    const bookingId = (bookJson.booking ?? bookJson).id;
+    expect(bookingId).toBeTruthy();
+
+    await profilePage.goto(); // waits for welcome heading — no networkidle
+    const cancelBtn = profilePage.cancelBookingButton.first();
+    await expect(cancelBtn).toBeVisible({ timeout: 8_000 });
+
+    // Register the response waiter BEFORE clicking so no race condition.
+    const cancelResponsePromise = page.waitForResponse(
+      (res) => res.url().includes("/cancel"),
+      { timeout: 8_000 }
+    );
+    page.once("dialog", (d) => d.accept());
+    await cancelBtn.click();
+    const cancelResponse = await cancelResponsePromise;
+
+    test.fail();
+    expect(cancelResponse.status()).toBe(200);
+    await expect(cancelBtn).not.toBeVisible({ timeout: 5_000 });
 
     await context.close();
   });
