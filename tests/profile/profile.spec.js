@@ -292,23 +292,19 @@ test.describe("✏️ Edit Profile Page", () => {
 // ══════════════════════════════════════════════════════════════════
 // Booking Cancellation tests
 // ══════════════════════════════════════════════════════════════════
-test.describe("❌ Booking Cancellation", () => {
+test.describe("Booking Cancellation", () => {
 
   // ─────────────────────────────────────────────────────────────
-  // TC-PRO-08  [Bug] Cancel button on profile page has no effect
-  //
-  //   Backend POST /bookings/{id}/cancel does not exist.
-  //   Frontend sends the request but receives 404; booking status
-  //   never changes and no error is shown to the user (silent failure).
+  // TC-PRO-08  Cancel button on profile page cancels the booking
   //
   //   Steps:
   //     1. Register + login a fresh user
   //     2. Create a future booking via the REST API (seeded room required)
   //     3. Visit /profile — booking should appear with a Cancel button
   //     4. Click Cancel and confirm the dialog
-  //     5. Expect booking to be cancelled — fails because endpoint is missing
+  //     5. Expect the Cancel button to disappear (booking now CANCELLED)
   // ─────────────────────────────────────────────────────────────
-  test("TC-PRO-08 | [Bug] Cancel booking button has no effect (missing backend endpoint)", async ({ browser }) => {
+  test("TC-PRO-08 | Cancel booking button cancels the booking successfully", async ({ browser }) => {
     const context  = await browser.newContext();
     const page     = await context.newPage();
     const email    = `cancel_test_${Date.now()}@hotel.com`;
@@ -370,7 +366,6 @@ test.describe("❌ Booking Cancellation", () => {
     await cancelBtn.click();
     const cancelResponse = await cancelResponsePromise;
 
-    test.fail();
     expect(cancelResponse.status()).toBe(200);
     await expect(cancelBtn).not.toBeVisible({ timeout: 5_000 });
 
