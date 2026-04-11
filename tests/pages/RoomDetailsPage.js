@@ -25,16 +25,15 @@ export class RoomDetailsPage {
     this.cancelBookingBtn = page.locator("button.cancel-booking");
 
     // ── DayPicker containers ──────────────────────────────────────
-    // RoomDetailsPage has two .date-picker divs: [0]=checkIn, [1]=checkOut
-    this.checkInPicker    = page.locator(".date-picker").nth(0);
-    this.checkOutPicker   = page.locator(".date-picker").nth(1);
+    this.checkInPicker    = page.locator(".date-picker", { has: page.getByText("Check-in Date",  { exact: true }) });
+    this.checkOutPicker   = page.locator(".date-picker", { has: page.getByText("Check-out Date", { exact: true }) });
 
     // ── Booking preview ───────────────────────────────────────────
     this.bookingPreview   = page.locator(".booking-preview");
-    this.previewCheckIn   = page.locator(".booking-preview p").nth(0);
-    this.previewCheckOut  = page.locator(".booking-preview p").nth(1);
-    this.previewTotalDays = page.locator(".booking-preview p").nth(2);
-    this.previewTotalPrice= page.locator(".booking-preview p").nth(3);
+    this.previewCheckIn   = page.locator(".booking-preview p", { hasText: /check-in date/i });
+    this.previewCheckOut  = page.locator(".booking-preview p", { hasText: /check-out date/i });
+    this.previewTotalDays = page.locator(".booking-preview p", { hasText: /total days/i });
+    this.previewTotalPrice= page.locator(".booking-preview p", { hasText: /total price/i });
 
     // ── Messages ──────────────────────────────────────────────────
     this.successMessage   = page.locator(".booking-success-message");
@@ -44,10 +43,7 @@ export class RoomDetailsPage {
   async goto(roomId) {
     await this.page.goto(`/room-details/${roomId}`);
     // Wait for room data to load (Loading... disappears)
-    await this.page.waitForFunction(
-      () => !document.body.innerText.includes("Loading..."),
-      { timeout: 10_000 }
-    );
+    await this.roomInfo.waitFor({ state: "visible", timeout: 10_000 });
   }
 
   /**

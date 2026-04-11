@@ -14,14 +14,12 @@ export class FindBookingPage {
     this.codeInput      = page.getByPlaceholder(/booking confirmation code/i);
     this.findButton     = page.getByRole("button", { name: /find/i });
 
-    // error uses inline style="color:red", no className
-    this.errorMessage   = page.locator("p[style*='color: red'], p[style*='color:red']");
+    this.errorMessage   = page.locator(".error-message");
 
     this.bookingDetails = page.locator(".booking-details");
-    this.bookingCode    = page.locator(".booking-details p").nth(0);
-    this.checkInDate    = page.locator(".booking-details p").nth(1);
-    this.checkOutDate   = page.locator(".booking-details p").nth(2);
-    this.paymentStatus  = page.locator(".booking-details p").nth(3);
+    this.bookingCode    = page.locator(".booking-details p", { hasText: /booking code/i });
+    this.checkInDate    = page.locator(".booking-details p", { hasText: /check-in date/i });
+    this.checkOutDate   = page.locator(".booking-details p", { hasText: /check-out date/i });
   }
 
   async goto() {

@@ -9,18 +9,25 @@ export class AllRoomsPage {
   constructor(page) {
     this.page = page;
 
-    // ── Locators ──────────────────────────────────────────────────
+    // ── Room type filter (top of page) ────────────────────────────
     this.heading        = page.getByRole("heading", { name: /all rooms/i });
     this.roomTypeSelect = page.locator(".all-room-filter-div select");
 
-    // RoomResult renders .room-list-item per room card
+    // ── RoomSearch component ──────────────────────────────────────
+    // Two readOnly inputs that open DayPicker on focus
+    this.searchCheckInInput   = page.getByPlaceholder(/select check-in date/i);
+    this.searchCheckOutInput  = page.getByPlaceholder(/select check-out date/i);
+    // Separate from roomTypeSelect above — scoped inside .search-container
+    this.searchRoomTypeSelect = page.locator(".search-container select");
+    this.searchButton         = page.locator("button.home-search-button");
+    this.searchErrorMessage   = page.locator(".search-error-message");
+    this.startDatePicker      = page.locator(".search-checkin-picker");
+    this.endDatePicker        = page.locator(".search-checkout-picker");
+
+    // ── RoomResult ────────────────────────────────────────────────
     this.roomCards      = page.locator(".room-list-item");
 
-    // AllRooms has no keyword search input — RoomSearch uses date pickers (readOnly)
-    // searchButton matches "Search Roooms" button in RoomSearch component
-    this.searchButton   = page.getByRole("button", { name: /search/i });
-
-    // Pagination buttons
+    // ── Pagination ────────────────────────────────────────────────
     this.nextPageButton = page.getByRole("button", { name: /next/i });
     this.prevPageButton = page.getByRole("button", { name: /prev/i });
   }
@@ -30,7 +37,6 @@ export class AllRoomsPage {
   }
 
   async waitForRoomsToLoad() {
-    await this.page.waitForLoadState("networkidle");
     await this.heading.waitFor({ state: "visible" });
   }
 
@@ -47,10 +53,4 @@ export class AllRoomsPage {
     await this.roomCards.first().locator("button.book-now-button").click();
   }
 
-  async search(keyword) {
-    // AllRooms page does not have a keyword search text input.
-    // The RoomSearch component uses date pickers (readOnly inputs) + room type select.
-    // This method is a no-op; tests should use selectRoomType() for filtering.
-    await this.page.waitForTimeout(100);
-  }
 }

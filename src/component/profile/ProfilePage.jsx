@@ -68,7 +68,6 @@ const ProfilePage = () => {
                                 <p><strong>Booking Code:</strong> {booking.bookingReference}</p>
                                 <p><strong>Check-in Date:</strong> {booking.checkInDate}</p>
                                 <p><strong>Check-out Date:</strong> {booking.checkOutDate}</p>
-                                <p><strong>Payment Status:</strong> {booking.paymentStatus}</p>
                                 <p><strong>Booking Status:</strong> {booking.bookingStatus}</p>
                                 <p><strong>Amount:</strong> {booking.totalPrice}</p>
                                 <p><strong>Room Number:</strong> {booking.room.roomNumber}</p>
