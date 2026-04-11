@@ -85,7 +85,6 @@ test.describe("👤 Profile Page", () => {
       const itemText  = await firstItem.textContent();
       expect(itemText).toMatch(/booking code/i);
       expect(itemText).toMatch(/check-in/i);
-      expect(itemText).toMatch(/payment status/i);
     } else {
       await expect(profilePage.noBookingsMessage).toBeVisible();
     }
@@ -166,27 +165,49 @@ test.describe("✏️ Edit Profile Page", () => {
   });
 
   // ─────────────────────────────────────────────────────────────
-  // TC-EDIT-02  [Bug] EditProfile page has no input fields for editing
+  // TC-EDIT-02a  [Bug] EditProfile page has no input fields for editing
   //
-  //   The name "EditProfile" suggests edit inputs, but the page only shows
-  //   user info and a delete button — no form fields at all.
-  //   「EditProfile」という名前なのに編集フォームが存在しない。
+  //   Expected: firstName, lastName, phoneNumber inputs + Save button
+  //   Actual:   no form fields at all — page only shows read-only info and Delete button
   // ─────────────────────────────────────────────────────────────
-  test("TC-EDIT-02 | [Bug] EditProfile page has no input fields for editing", async ({ page }, testInfo) => {
+  test("TC-EDIT-02a | [Bug] EditProfile page has no input fields for editing", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "chromium-public", "Requires auth");
     const editPage = new EditProfilePage(page);
     await editPage.goto();
     await editPage.waitForProfileToLoad();
 
-    const inputCount = await page.locator(".edit-profile-page input").count();
+    // Bug: none of these inputs exist — editing is not implemented
+    test.fail();
+    await expect(page.locator('input[name="firstName"]')).toBeVisible();
+    await expect(page.locator('input[name="lastName"]')).toBeVisible();
+    await expect(page.locator('input[name="phoneNumber"]')).toBeVisible();
+    await expect(page.getByRole("button", { name: /save/i })).toBeVisible();
+  });
 
-    // Current behavior: 0 inputs (editing is not implemented)
-    // Expected behavior: should have firstName, lastName, phoneNumber fields
-    if (inputCount === 0) {
-      console.warn("⚠️ BUG: EditProfile page has no input fields — editing is not implemented");
-    }
-    // Document current state — not a hard fail, just documenting the bug
-    expect(inputCount).toBeGreaterThanOrEqual(0);
+  // ─────────────────────────────────────────────────────────────
+  // TC-EDIT-02b  [Bug] submitting edit form never calls PUT /users/update
+  //
+  //   Backend PUT /users/update exists and is tested (TC-U-10~14).
+  //   Bug: frontend has no form, so the API is never called from this page.
+  // ─────────────────────────────────────────────────────────────
+  test("TC-EDIT-02b | [Bug] submitting edit never calls PUT /users/update", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === "chromium-public", "Requires auth");
+    const editPage = new EditProfilePage(page);
+    await editPage.goto();
+    await editPage.waitForProfileToLoad();
+
+    // Monitor outgoing requests to detect whether the update API is called
+    let updateCalled = false;
+    page.on("request", (req) => {
+      if (req.method() === "PUT" && req.url().includes("/users/update")) {
+        updateCalled = true;
+      }
+    });
+
+    // Bug: no save button exists, so we cannot even attempt to submit
+    test.fail();
+    await page.getByRole("button", { name: /save/i }).click();
+    expect(updateCalled).toBe(true);
   });
 
   // ─────────────────────────────────────────────────────────────

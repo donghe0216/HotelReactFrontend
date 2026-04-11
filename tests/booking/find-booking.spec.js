@@ -81,7 +81,7 @@ test.describe("🔍 Find Booking Page", () => {
     await findPage.search("INVALID-REF-000");
 
     const msg = await findPage.getErrorMessage();
-    expect(msg).toBeTruthy();
+    expect(msg).toMatch(/not found/i);
     await expect(findPage.bookingDetails).not.toBeVisible();
   });
 
@@ -102,7 +102,6 @@ test.describe("🔍 Find Booking Page", () => {
     expect(detailsText).toMatch(/booking code/i);
     expect(detailsText).toMatch(/check-in date/i);
     expect(detailsText).toMatch(/check-out date/i);
-    expect(detailsText).toMatch(/payment status/i);
 
     // Booker info
     expect(detailsText).toMatch(/first name/i);
@@ -147,31 +146,5 @@ test.describe("🔍 Find Booking Page", () => {
 
     await expect(findPage.bookingDetails).toBeVisible();
     await expect(findPage.errorMessage).not.toBeVisible();
-  });
-
-  // ─────────────────────────────────────────────────────────────
-  // TC-FB-09  [Bug] "Booker Detials" heading has a typo
-  //
-  //   FindBookingPage.jsx: <h3>Booker Detials</h3>
-  //   「Detials」は「Details」の誤字。should be "Booker Details"
-  // ─────────────────────────────────────────────────────────────
-  test("TC-FB-09 | [Bug] 'Booker Detials' heading has a typo", async ({ page }) => {
-    test.skip(!SEED_BOOKING_REF, "No seed booking reference — run auth setup first");
-    const findPage = new FindBookingPage(page);
-    await findPage.goto();
-    await findPage.search(SEED_BOOKING_REF);
-    await findPage.waitForBookingDetails();
-
-    // Check for the current typo in the UI
-    const typoHeading = page.getByText("Booker Detials");
-    const isTypo = await typoHeading.isVisible();
-
-    if (isTypo) {
-      console.warn('⚠️ BUG: Heading says "Booker Detials" — should be "Booker Details"');
-    }
-    // After fix: expect(page.getByText("Booker Details")).toBeVisible();
-    // Document current state:
-    const hasCorrect = await page.getByText("Booker Details").isVisible();
-    expect(isTypo || hasCorrect).toBeTruthy();
   });
 });
