@@ -53,7 +53,8 @@ jobs:
         run: npm ci
 
       - name: Build React app
-        # CI=false prevents CRA from treating ESLint warnings as errors
+        # CI=false prevents CRA from treating ESLint warnings as errors.
+        # TODO: resolve ESLint warnings and remove this flag.
         run: CI=false npm run build
 
       - name: Configure AWS credentials
@@ -67,12 +68,15 @@ jobs:
         env:
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
         run: |
+          # Static assets (JS/CSS/images) use content-hash filenames (CRA default)
+          # — safe to cache permanently since any change produces a new filename.
           aws s3 sync build/ s3://${S3_BUCKET} \
             --delete \
             --cache-control "public,max-age=31536000,immutable" \
             --exclude "index.html"
 
-          # index.html must NOT be cached (SPA entry point)
+          # index.html has no hash and is the SPA entry point — must never be
+          # cached, otherwise users get stale JS/CSS references after a deploy.
           aws s3 cp build/index.html s3://${S3_BUCKET}/index.html \
             --cache-control "no-cache,no-store,must-revalidate"
 
@@ -82,7 +86,7 @@ jobs:
             --distribution-id ${{ secrets.CF_DIST_ID }} \
             --paths "/*"
 
-  # ── Backend: Maven build → Docker → ECR → ECS force redeploy ───────────────
+  # ── Backend: Maven build → JAR upload to S3 → deploy to EC2 via SSM ─────────
   deploy-backend:
     needs: check
     runs-on: ubuntu-latest
