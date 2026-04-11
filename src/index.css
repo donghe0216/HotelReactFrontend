@@ -800,8 +800,15 @@
  /*FIND BOOKING PAGE */
  .find-booking-page {
   max-width: 50%;
-  margin: 10px auto 60px auto;
+  margin: 60px auto 60px auto;
   padding: 20px;
+  text-align: center;
+ }
+
+ .find-booking-page .search-container {
+  justify-content: center;
+  margin-left: 0;
+  padding: 0;
  }
  
  

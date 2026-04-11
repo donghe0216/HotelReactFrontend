@@ -73,6 +73,7 @@ const RoomDetailsPage = () => {
         setErrorMessage(null);
         setShowBookingPreview(false);
         setShowDatePicker(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || error.message);
@@ -100,7 +101,8 @@ const RoomDetailsPage = () => {
           <p><strong>Check-in:</strong> {confirmedBooking.checkInDate}</p>
           <p><strong>Check-out:</strong> {confirmedBooking.checkOutDate}</p>
           <p><strong>Total Price:</strong> ¥{confirmedBooking.totalPrice}</p>
-          <p><strong>Payment:</strong> Due at hotel upon check-in</p>
+          <p style={{ color: "#b45309" }}><strong>Payment:</strong> Payment is accepted at the hotel upon check-in only. We do not accept online payments.</p>
+          <p style={{ color: "#b45309" }}><strong>Cancellation Policy:</strong> Free cancellation if cancelled more than 24 hours before check-in. Cancellations within 24 hours of check-in are not accepted.</p>
           <button
             className="cancel-booking"
             onClick={() => navigate("/rooms")}
