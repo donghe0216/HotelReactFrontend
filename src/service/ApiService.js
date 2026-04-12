@@ -3,7 +3,9 @@ import CryptoJS from "crypto-js";
 
 export default class ApiService {
 
-    static BASE_URL = "http://localhost:9090/api";
+    // REACT_APP_API_URL="/api" (production) → calls go to /api/... → CloudFront routes /api/* to EC2.
+    // Unset (local dev) → falls back to localhost:9090.
+    static BASE_URL = process.env.REACT_APP_API_URL ?? "http://localhost:9090/api";
     // Hardcoded key is intentional for local dev/demo; must be moved to env var before any real deployment
     static ENCRYPTION_KEY = "dennis-secrete-key";
 
