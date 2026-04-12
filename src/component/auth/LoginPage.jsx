@@ -59,11 +59,10 @@ const LoginPage = () => {
                 (field) => (
                     <div className="form-group" key={field}>
                         <label>{field.charAt(0).toLocaleUpperCase() + field.slice(1)}: </label>
-                        <input type={field} 
+                        <input type={field}
                         name={field}
                         value={formData[field]}
                         onChange={handleChange}
-                        required
                         />
                     </div>
                 )

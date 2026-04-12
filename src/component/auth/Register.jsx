@@ -53,11 +53,10 @@ const RegisterPage = () => {
                     (field) => (
                         <div className="form-group" key={field}>
                             <label>{field.replace(/([A-Z])/g, " $1").trim()}: </label>
-                            <input type={field === "email" ? "email" : "text"} 
+                            <input type={field === "email" ? "email" : "text"}
                             name={field}
                             value={formData[field]}
                             onChange={handleInputChange}
-                            required
                             />
                         </div>
                     )

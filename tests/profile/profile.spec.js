@@ -326,7 +326,8 @@ test.describe("Booking Cancellation", () => {
 
     // Token in localStorage is encrypted by the app's ApiService and cannot
     // be used directly — re-login via API to obtain the raw JWT.
-    const loginResp = await page.request.post("/api/auth/login", {
+    // Use absolute URL: page.request uses baseURL (localhost:3000) by default.
+    const loginResp = await page.request.post("http://localhost:9090/api/auth/login", {
       data: { email, password },
     });
     const rawToken = (await loginResp.json()).token;
@@ -334,7 +335,7 @@ test.describe("Booking Cancellation", () => {
 
     // Create booking via API rather than UI to keep the test focused on
     // cancellation behaviour — the booking creation flow is covered separately.
-    const roomsJson = await (await page.request.get("/api/rooms/all")).json();
+    const roomsJson = await (await page.request.get("http://localhost:9090/api/rooms/all")).json();
     const rooms     = roomsJson.roomList ?? roomsJson.rooms ?? roomsJson;
     expect(Array.isArray(rooms) && rooms.length > 0).toBeTruthy();
     const roomId = rooms[0].id;
@@ -344,7 +345,7 @@ test.describe("Booking Cancellation", () => {
     const checkOut = new Date(today); checkOut.setDate(today.getDate() + 4);
     const fmt      = (d) => d.toISOString().slice(0, 10);
 
-    const bookResp = await page.request.post("/api/bookings", {
+    const bookResp = await page.request.post("http://localhost:9090/api/bookings", {
       headers: { Authorization: `Bearer ${rawToken}`, "Content-Type": "application/json" },
       data: { roomId, checkInDate: fmt(checkIn), checkOutDate: fmt(checkOut) },
     });

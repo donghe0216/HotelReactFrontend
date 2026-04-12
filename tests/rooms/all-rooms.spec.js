@@ -200,7 +200,7 @@ test.describe("🔍 RoomSearch Component", () => {
 
     await roomsPage.selectCheckInDate("25");
     await roomsPage.selectCheckOutDate("27");
-    await roomsPage.searchRoomTypeSelect.selectOption("SINGLE");
+    await roomsPage.searchRoomTypeSelect.selectOption("DOUBLE");
     await roomsPage.searchButton.click();
 
     // Room list should update with results matching the searched type
@@ -209,7 +209,7 @@ test.describe("🔍 RoomSearch Component", () => {
     expect(count).toBeGreaterThan(0);
 
     const typeTexts = await page.locator(".room-list-item .room-details h3").allTextContents();
-    typeTexts.forEach(t => expect(t.toUpperCase()).toContain("SINGLE"));
+    typeTexts.forEach(t => expect(t.toUpperCase()).toContain("DOUBLE"));
   });
 
   // ─────────────────────────────────────────────────────────────
