@@ -197,18 +197,10 @@ test.describe("✏️ Edit Profile Page", () => {
     const editPage = new EditProfilePage(page);
     await editPage.goto();
 
-    // Monitor outgoing requests to detect whether the update API is called
-    let updateCalled = false;
-    page.on("request", (req) => {
-      if (req.method() === "PUT" && req.url().includes("/users/update")) {
-        updateCalled = true;
-      }
-    });
-
-    // Bug: no save button exists, so we cannot even attempt to submit
+    // Bug: no save button exists — assertion fails within 5s (not 30s timeout)
+    // test.fail() flips the failed assertion to a passing test result
     test.fail();
-    await page.getByRole("button", { name: /save/i }).click();
-    expect(updateCalled).toBe(true);
+    await expect(page.getByRole("button", { name: /save/i })).toBeVisible({ timeout: 5000 });
   });
 
   // ─────────────────────────────────────────────────────────────

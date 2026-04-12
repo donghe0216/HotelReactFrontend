@@ -304,6 +304,6 @@ test.describe("🏠 All Rooms Page — Pagination", () => {
     const count = await roomsPage.getRoomCardCount();
     expect(count).toBe(9); // page size is 9
 
-    await expect(page.locator(".pagination")).toBeVisible();
+    await expect(page.locator(".pagination-nav")).toBeVisible();
   });
 });
