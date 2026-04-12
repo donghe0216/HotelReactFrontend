@@ -56,7 +56,7 @@ jobs:
       - name: Checkout backend
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.repository_owner }}/HotelBookingBackend
+          repository: ${{ github.repository_owner }}/HotelJavaBackend
           path: backend
 
       # ── 3. Set up Java 21 ──────────────────────────────────────────
