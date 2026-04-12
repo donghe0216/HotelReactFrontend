@@ -178,14 +178,26 @@ jobs:
       #    INSERT IGNORE is idempotent — safe if the step is re-run.
       - name: Seed room
         run: |
+          # Seed 11 rooms (10+ required for TC-AR-07 pagination test).
+          # Mix of DOUBLE and SINGLE to support type-filter tests (TC-AR-03/04/12).
           mysql -h ${DB_HOST} -u root -p${DB_PASSWORD} hotel -e "
-            INSERT IGNORE INTO rooms (room_number, type, price_per_night, capacity, description, image_url)
-            VALUES (101, 'DOUBLE', 150.00, 2, 'CI seed room', '/images/placeholder.jpg');
+            INSERT IGNORE INTO rooms (room_number, type, price_per_night, capacity, description, image_url) VALUES
+              (101, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (102, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (103, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (104, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (105, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (106, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (107, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (108, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (109, 'DOUBLE', 150.00, 2, 'CI seed room',  '/images/placeholder.jpg'),
+              (110, 'SINGLE', 100.00, 1, 'CI seed room',  '/images/placeholder.jpg'),
+              (111, 'SINGLE', 100.00, 1, 'CI seed room',  '/images/placeholder.jpg');
           "
           ROOM_COUNT=$(mysql -h ${DB_HOST} -u root -p${DB_PASSWORD} hotel -sNe \
             "SELECT COUNT(*) FROM rooms;")
           echo "Rooms in DB: ${ROOM_COUNT}"
-          [ "$ROOM_COUNT" -ge "1" ] || { echo "Room seed failed"; exit 1; }
+          [ "$ROOM_COUNT" -ge "11" ] || { echo "Room seed failed"; exit 1; }
 
       # ── 11. Install Playwright browsers ───────────────────────────
       - name: Install Playwright browsers

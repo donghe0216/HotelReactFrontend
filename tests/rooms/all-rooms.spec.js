@@ -75,7 +75,7 @@ test.describe("🏠 All Rooms Page", () => {
 
     const totalAll = await roomsPage.getRoomCardCount();
 
-    await roomsPage.selectRoomType("SINGLE");
+    await roomsPage.selectRoomType("DOUBLE");
     await expect(roomsPage.roomCards.first()).toBeVisible();
     await roomsPage.selectRoomType("");   // back to All
     await expect(roomsPage.roomCards.first()).toBeVisible();
