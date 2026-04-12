@@ -81,6 +81,8 @@ test.describe("👤 Profile Page", () => {
     const profilePage = new ProfilePage(page);
     await profilePage.goto();
 
+    // Wait for booking section to finish loading before counting
+    await page.waitForSelector('.booking-item, :text("No bookings found.")', { timeout: 8_000 });
     const count = await profilePage.getBookingCount();
 
     // Branching on runtime state: seed data may or may not include bookings for this account.
