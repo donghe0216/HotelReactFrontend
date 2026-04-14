@@ -9,6 +9,7 @@ on:
     workflows: ["E2E Tests"]
     types: [completed]
     branches: [master]
+  workflow_dispatch:
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Required GitHub Secrets (Settings → Secrets and variables → Actions):
@@ -30,7 +31,7 @@ jobs:
   # ── Guard: only run when E2E passed ────────────────────────────────────────
   check:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - run: echo "E2E passed — proceeding with deployment"
 
