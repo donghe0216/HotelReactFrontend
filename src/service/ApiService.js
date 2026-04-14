@@ -3,7 +3,7 @@ import CryptoJS from "crypto-js";
 
 export default class ApiService {
 
-    static BASE_URL = "http://localhost:9090/api";
+    static BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:9090/api";
     // Hardcoded key is intentional for local dev/demo; must be moved to env var before any real deployment
     static ENCRYPTION_KEY = "dennis-secrete-key";
 

@@ -12,7 +12,7 @@ jobs:
 
     # ── Centralised test config ─────────────────────────────────────
     #    Non-secret values reused across multiple steps.
-    #    Real secrets (JWT, Stripe) live in GitHub Settings → Secrets.
+    #    Real secrets (JWT) live in GitHub Settings → Secrets.
     #    If you change seed credentials here, also update
     #    CUSTOMER / ADMIN constants in tests/auth/auth.setup.js.
     env:
@@ -93,13 +93,12 @@ jobs:
         run: sudo apt-get install -y --no-install-recommends jq mysql-client
 
       # ── 7. Start backend ───────────────────────────────────────────
-      #    Required secrets: CI_JWT_SECRET, CI_STRIPE_SECRET_KEY
+      #    Required secrets: CI_JWT_SECRET
       #    Add via: GitHub repo → Settings → Secrets and variables → Actions
       - name: Start backend
         working-directory: backend
         env:
           JWT_SECRET: ${{ secrets.CI_JWT_SECRET }}
-          STRIPE_SECRET_KEY: ${{ secrets.CI_STRIPE_SECRET_KEY }}
         run: |
           mkdir -p /tmp/hotel-images
           java -jar target/*.jar \
@@ -111,7 +110,6 @@ jobs:
             --spring.mail.port=1025 \
             --spring.mail.username="" \
             --spring.mail.password="" \
-            --stripe.api.secret.key=${STRIPE_SECRET_KEY} \
             --app.image.upload-dir=/tmp/hotel-images/ \
             --management.health.mail.enabled=false \
           > /tmp/backend.log 2>&1 &
@@ -216,6 +214,9 @@ jobs:
         working-directory: frontend
         env:
           CI: true
+          # Override .env.production so the CI build points to the local backend,
+          # not the production EC2 instance.
+          REACT_APP_API_URL: http://localhost:9090/api
         run: npx playwright test
 
       # ── 13. Upload Playwright HTML report ─────────────────────────
