@@ -48,6 +48,7 @@ const RoomDetailsPage = () => {
     if (!checkInDate || !checkOutDate) {
       setErrorMessage("Please select both check-in and check-out dates");
       setTimeout(() => setErrorMessage(null), 5000);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -77,6 +78,7 @@ const RoomDetailsPage = () => {
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || error.message);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
