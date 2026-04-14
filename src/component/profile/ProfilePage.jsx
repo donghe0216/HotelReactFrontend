@@ -41,6 +41,7 @@ const ProfilePage = () => {
             setBookings(myBookingResponse.bookings);
         } catch (err) {
             setError(err.response?.data?.message || err.message);
+            window.scrollTo({ top: 0, behavior: "smooth" });
         }
     };
 
@@ -70,12 +71,14 @@ const ProfilePage = () => {
                                 <p><strong>Check-out Date:</strong> {booking.checkOutDate}</p>
                                 <p><strong>Booking Status:</strong> {booking.bookingStatus}</p>
                                 <p><strong>Amount:</strong> {booking.totalPrice}</p>
-                                <p><strong>Room Number:</strong> {booking.room.roomNumber}</p>
-                                <p><strong>Room Type:</strong> {booking.room.type}</p>
-                                <img src={booking.room.imageUrl} alt="Room" className="room-photo" />
-                                {/* Cancellation is only allowed before the check-in date (not on the same day) */}
+                                <p><strong>Room Number:</strong> {booking.room?.roomNumber ?? 'N/A'}</p>
+                                <p><strong>Room Type:</strong> {booking.room?.type ?? 'N/A'}</p>
+                                {booking.room?.imageUrl && <img src={booking.room.imageUrl} alt="Room" className="room-photo" />}
+                                {/* Cancellation is only allowed strictly before the check-in date.
+                                    Compare date strings (YYYY-MM-DD) in local time to avoid UTC/JST
+                                    midnight shift that would hide the button after 09:00 JST. */}
                                 {booking.bookingStatus === 'BOOKED' &&
-                                    new Date(booking.checkInDate) > new Date() && (
+                                    booking.checkInDate > new Date().toLocaleDateString('sv') && (
                                     <button
                                         className="cancel-booking-button"
                                         onClick={() => handleCancelBooking(booking.id)}

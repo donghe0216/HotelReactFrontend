@@ -101,7 +101,6 @@ const RoomDetailsPage = () => {
           <p><strong>Check-in:</strong> {confirmedBooking.checkInDate}</p>
           <p><strong>Check-out:</strong> {confirmedBooking.checkOutDate}</p>
           <p><strong>Total Price:</strong> ¥{confirmedBooking.totalPrice}</p>
-          <p style={{ color: "#b45309" }}><strong>Payment:</strong> Payment is accepted at the hotel upon check-in only. We do not accept online payments.</p>
           <p style={{ color: "#b45309" }}><strong>Cancellation Policy:</strong> Free cancellation if cancelled more than 24 hours before check-in. Cancellations within 24 hours of check-in are not accepted.</p>
           <button
             className="cancel-booking"
@@ -136,8 +135,9 @@ const RoomDetailsPage = () => {
             <div className="date-picker">
               <label>Check-in Date</label>
               <DayPicker
+                mode="single"
                 selected={checkInDate}
-                onDayClick={setCheckInDate}
+                onSelect={setCheckInDate}
                 disabled={(date) => checkOutDate && date > checkOutDate}
               />
             </div>
@@ -145,8 +145,9 @@ const RoomDetailsPage = () => {
             <div className="date-picker">
               <label>Check-out Date</label>
               <DayPicker
+                mode="single"
                 selected={checkOutDate}
-                onDayClick={setCheckOutDate}
+                onSelect={setCheckOutDate}
                 disabled={(date) => checkInDate && date < checkInDate}
               />
             </div>

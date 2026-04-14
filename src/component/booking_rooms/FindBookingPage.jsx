@@ -14,6 +14,13 @@ const FindBookingPage = () => {
         }
         try {
             const response = await ApiService.getBookingByReference(confirmationCode);
+            // CloudFront may intercept API 404s and return SPA HTML instead of JSON.
+            // In that case Axios doesn't throw, but response.booking is undefined.
+            if (!response.booking) {
+                setError("Booking not found");
+                setTimeout(() => setError(''), 5000);
+                return;
+            }
             setBookingDetails(response.booking);
             setError(null);
         } catch (error) {
