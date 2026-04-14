@@ -146,6 +146,20 @@ test.describe("👤 Profile Page", () => {
 
     await context.close();
   });
+
+  // ─────────────────────────────────────────────────────────────
+  // TC-PRO-09  unauthenticated user visiting /edit-profile is redirected to /login
+  // ─────────────────────────────────────────────────────────────
+  test("TC-PRO-09 | unauthenticated user visiting /edit-profile is redirected to /login", async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium-public", "Unauthenticated Guard test — run in chromium-public only");
+    const context = await browser.newContext(); // no storageState
+    const page    = await context.newPage();
+
+    await page.goto("/edit-profile");
+    await expect(page).toHaveURL(/login/, { timeout: 15_000 });
+
+    await context.close();
+  });
 });
 
 // ══════════════════════════════════════════════════════════════════

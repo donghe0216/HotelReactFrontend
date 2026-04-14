@@ -63,7 +63,6 @@ const ManageBookingsPage = () => {
             <p><strong>Check In Date:</strong> {booking.checkInDate}</p>
             <p><strong>Check Out Date:</strong> {booking.checkOutDate}</p>
             <p><strong>Total Price:</strong> {booking.totalPrice}</p>
-            <p><strong>Payment Status:</strong> {booking.paymentStatus}</p>
             <p><strong>Booking Status:</strong> {booking.bookingStatus}</p>
             <button
               className="edit-room-button"
