@@ -20,7 +20,7 @@ import { AllRoomsPage } from "../pages/AllRoomsPage.js";
 const API_BASE = "http://localhost:9090/api";
 const ADMIN    = { email: "admin@hotel.com", password: "Admin1234!" };
 
-test.describe("🏠 All Rooms Page", () => {
+test.describe("All Rooms Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-AR-01  page loads with room list and filter controls
@@ -127,7 +127,7 @@ test.describe("🏠 All Rooms Page", () => {
 // RoomSearch component tests
 // Covers: date picker open/close, date selection, validation, search results
 // ══════════════════════════════════════════════════════════════════
-test.describe("🔍 RoomSearch Component", () => {
+test.describe("RoomSearch Component", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-AR-08  clicking Check-in input opens the date picker
@@ -244,7 +244,7 @@ test.describe("🔍 RoomSearch Component", () => {
 // ══════════════════════════════════════════════════════════════════
 // TC-AR-07  pagination — requires 10+ rooms, created and cleaned up via API
 // ══════════════════════════════════════════════════════════════════
-test.describe("🏠 All Rooms Page — Pagination", () => {
+test.describe("All Rooms Page — Pagination", () => {
 
   let adminToken     = null;
   let createdRoomIds = [];

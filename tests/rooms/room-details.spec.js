@@ -58,16 +58,17 @@ test.beforeAll(async ({ request }) => {
   const { token } = await loginRes.json();
 
   // 3. Seed a real conflict booking for TC-RD-08
-  // Track whether seed succeeded so TC-RD-08 can skip if it didn't
+  // If the booking already exists from a prior run (dates taken → 400/409),
+  // the room is still occupied — the conflict TC-RD-08 needs is in place either way.
   const { checkIn, checkOut } = conflictDates();
   const seedRes = await request.post(`${API_BASE}/bookings`, {
     headers: { Authorization: `Bearer ${token}` },
     data: { roomId: SEED_ROOM_ID, checkInDate: checkIn, checkOutDate: checkOut },
   });
-  SEED_BOOKING_OK = seedRes.ok();
+  SEED_BOOKING_OK = seedRes.ok() || seedRes.status() === 400 || seedRes.status() === 409;
 });
 
-test.describe("🛏️ Room Details & Booking Flow", () => {
+test.describe("Room Details & Booking Flow", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-RD-01  page loads with room type, price, and capacity info

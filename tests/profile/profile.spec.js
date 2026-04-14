@@ -16,7 +16,7 @@ import { EditProfilePage } from "../pages/EditProfilePage.js";
 import { RegisterPage }    from "../pages/RegisterPage.js";
 import { LoginPage }       from "../pages/LoginPage.js";
 
-test.describe("👤 Profile Page", () => {
+test.describe("Profile Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-PRO-01  page loads with welcome heading and user info
@@ -100,7 +100,8 @@ test.describe("👤 Profile Page", () => {
   // ─────────────────────────────────────────────────────────────
   // TC-PRO-06  user with no bookings sees "No bookings found."
   // ─────────────────────────────────────────────────────────────
-  test("TC-PRO-06 | new user with no bookings sees 'No bookings found.'", async ({ browser }) => {
+  test("TC-PRO-06 | new user with no bookings sees 'No bookings found.'", async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium", "Uses its own browser context — run once only");
     // Fresh context: register + login a brand-new user
     const context = await browser.newContext();
     const page    = await context.newPage();
@@ -165,7 +166,7 @@ test.describe("👤 Profile Page", () => {
 // ══════════════════════════════════════════════════════════════════
 // Edit Profile Page tests
 // ══════════════════════════════════════════════════════════════════
-test.describe("✏️ Edit Profile Page", () => {
+test.describe("Edit Profile Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-EDIT-01  page loads with user info and Delete button
@@ -259,7 +260,8 @@ test.describe("✏️ Edit Profile Page", () => {
   //   After deletion, the app navigates to /signup which has no route.
   //   Should be navigate('/register') or navigate('/home').
   // ─────────────────────────────────────────────────────────────
-  test("TC-EDIT-05 | [Bug] after delete, navigates to /signup which does not exist", async ({ browser }) => {
+  test("TC-EDIT-05 | [Bug] after delete, navigates to /signup which does not exist", async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium", "Uses its own browser context — run once only");
     // Use a disposable account so we can safely delete it
     const context = await browser.newContext();
     const page    = await context.newPage();
@@ -312,7 +314,8 @@ test.describe("Booking Cancellation", () => {
   //     4. Click Cancel and confirm the dialog
   //     5. Expect the Cancel button to disappear (booking now CANCELLED)
   // ─────────────────────────────────────────────────────────────
-  test("TC-PRO-08 | Cancel booking button cancels the booking successfully", async ({ browser }) => {
+  test("TC-PRO-08 | Cancel booking button cancels the booking successfully", async ({ browser }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium", "Uses its own browser context — run once only");
     const context  = await browser.newContext();
     const page     = await context.newPage();
     const email    = `cancel_test_${Date.now()}@hotel.com`;

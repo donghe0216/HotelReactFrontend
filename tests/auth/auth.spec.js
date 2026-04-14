@@ -21,7 +21,7 @@ const CUSTOMER = { email: "customer@hotel.com", password: "Customer1234!" };
 // ══════════════════════════════════════════════════════════════════
 // Login Page
 // ══════════════════════════════════════════════════════════════════
-test.describe("🔐 Login Page", () => {
+test.describe("Login Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-AUTH-01  page loads with all required elements
@@ -85,7 +85,7 @@ test.describe("🔐 Login Page", () => {
 // ══════════════════════════════════════════════════════════════════
 // Register Page
 // ══════════════════════════════════════════════════════════════════
-test.describe("📝 Register Page", () => {
+test.describe("Register Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-AUTH-05  page loads with all required fields

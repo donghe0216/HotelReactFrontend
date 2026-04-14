@@ -78,7 +78,7 @@ setup("create seed booking", async ({ request }) => {
   const checkOut = new Date(checkIn);
   checkOut.setDate(checkOut.getDate() + 2);
 
-  const bookingRes = await request.post(`${API_BASE}/bookings/create`, {
+  const bookingRes = await request.post(`${API_BASE}/bookings`, {
     headers: { Authorization: `Bearer ${token}` },
     data: { roomId, checkInDate: fmt(checkIn), checkOutDate: fmt(checkOut) },
   });

@@ -28,12 +28,13 @@ try {
   }
 } catch { /* read failed — dependent tests will be skipped */ }
 
-test.describe("🔍 Find Booking Page", () => {
+test.describe("Find Booking Page", () => {
 
   // ─────────────────────────────────────────────────────────────
   // TC-FB-01  page loads with search input and Find button
   // ─────────────────────────────────────────────────────────────
-  test("TC-FB-01 | page loads with search input and Find button", async ({ page }) => {
+  test("TC-FB-01 | page loads with search input and Find button", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium-public", "Public page — run once in chromium-public only");
     const findPage = new FindBookingPage(page);
     await findPage.goto();
 
@@ -44,7 +45,8 @@ test.describe("🔍 Find Booking Page", () => {
   // ─────────────────────────────────────────────────────────────
   // TC-FB-02  clicking Find with empty input shows a validation error
   // ─────────────────────────────────────────────────────────────
-  test("TC-FB-02 | clicking Find with empty input shows validation error", async ({ page }) => {
+  test("TC-FB-02 | clicking Find with empty input shows validation error", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium-public", "Public page — run once in chromium-public only");
     const findPage = new FindBookingPage(page);
     await findPage.goto();
     await findPage.findButton.click();
@@ -56,7 +58,8 @@ test.describe("🔍 Find Booking Page", () => {
   // ─────────────────────────────────────────────────────────────
   // TC-FB-03  whitespace-only input is treated as empty and shows error
   // ─────────────────────────────────────────────────────────────
-  test("TC-FB-03 | whitespace-only input is treated as empty and shows error", async ({ page }) => {
+  test("TC-FB-03 | whitespace-only input is treated as empty and shows error", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium-public", "Public page — run once in chromium-public only");
     const findPage = new FindBookingPage(page);
     await findPage.goto();
     await findPage.search("     ");
@@ -68,7 +71,8 @@ test.describe("🔍 Find Booking Page", () => {
   // ─────────────────────────────────────────────────────────────
   // TC-FB-04  error message disappears automatically after 5 seconds
   // ─────────────────────────────────────────────────────────────
-  test("TC-FB-04 | error message disappears after 5 seconds", async ({ page }) => {
+  test("TC-FB-04 | error message disappears after 5 seconds", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium-public", "Public page — run once in chromium-public only");
     const findPage = new FindBookingPage(page);
     await findPage.goto();
     await findPage.findButton.click();
@@ -81,7 +85,8 @@ test.describe("🔍 Find Booking Page", () => {
   // ─────────────────────────────────────────────────────────────
   // TC-FB-05  invalid reference shows an error from the backend
   // ─────────────────────────────────────────────────────────────
-  test("TC-FB-05 | invalid reference shows backend error", async ({ page }) => {
+  test("TC-FB-05 | invalid reference shows backend error", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium-public", "Public page — run once in chromium-public only");
     const findPage = new FindBookingPage(page);
     await findPage.goto();
     await findPage.search("INVALID-REF-000");
