@@ -76,6 +76,7 @@ const AddRoomPage = () => {
     ) {
       setError("All room details must be provided.");
       setTimeout(() => setError(""), 5000);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -98,7 +99,7 @@ const AddRoomPage = () => {
       const result = await ApiService.addRoom(formData);
       if (result.status === 200) {
         setSuccess("Room Added successfully.");
-
+        window.scrollTo({ top: 0, behavior: "smooth" });
         setTimeout(() => {
           setSuccess("");
           navigate("/admin/manage-rooms");
@@ -107,6 +108,7 @@ const AddRoomPage = () => {
     } catch (error) {
       setError(error.response?.data?.message || error.message);
       setTimeout(() => setError(""), 5000);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 

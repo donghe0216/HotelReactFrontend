@@ -12,7 +12,6 @@ const EditBookingPage = () => {
   const [formState, setFormState] = useState({
     id:"",
     bookingStatus: "",
-    paymentStatus: "",
   });
 
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -25,7 +24,6 @@ const EditBookingPage = () => {
         setFormState({
             id:response.booking.id,
           bookingStatus: response.booking.bookingStatus || "",
-          paymentStatus: response.booking.paymentStatus || "",
         });
       } catch (error) {
         setMessage({
@@ -44,14 +42,15 @@ const EditBookingPage = () => {
   };
 
   const handleUpdate = async () => {
-    if (!formState.bookingStatus && !formState.paymentStatus) {
-      setMessage({ type: "error", text: "Please update at least one field." });
+    if (!formState.bookingStatus) {
+      setMessage({ type: "error", text: "Please select a booking status." });
       return;
     }
 
     try {
       await ApiService.updateBooking(formState);
       setMessage({ type: "success", text: "Booking updated successfully." });
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
       setTimeout(() => {
         setMessage({ type: "", text: "" });
@@ -62,6 +61,7 @@ const EditBookingPage = () => {
         type: "error",
         text: error.response?.data?.message || error.message,
       });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -80,32 +80,38 @@ const EditBookingPage = () => {
           <p>Check-in Date: {bookingDetails.checkInDate}</p>
           <p>Check-out Date: {bookingDetails.checkOutDate}</p>
           <p>Total Price: {bookingDetails.totalPrice}</p>
-          <p>Payment Status: {bookingDetails.paymentStatus}</p>
           <p>Booking Status: {bookingDetails.bookingStatus}</p>
 
           <br />
           <hr />
           <br />
           <h3>User Who Made The Booking</h3>
-          <div>
-            <p> First Name: {bookingDetails.user.firstName}</p>
-            {/* BUG: label says "First Name" but renders lastName */}
-            <p> First Name: {bookingDetails.user.lastName}</p>
-            <p> Email: {bookingDetails.user.email}</p>
-            <p> Phone Number: {bookingDetails.user.phoneNumber}</p>
-          </div>
+          {bookingDetails.user ? (
+            <div>
+              <p> First Name: {bookingDetails.user.firstName}</p>
+              <p> Last Name: {bookingDetails.user.lastName}</p>
+              <p> Email: {bookingDetails.user.email}</p>
+              <p> Phone Number: {bookingDetails.user.phoneNumber}</p>
+            </div>
+          ) : (
+            <p>User information not available</p>
+          )}
 
           <br />
           <hr />
           <br />
           <h3>Room Details</h3>
-          <div>
-            <p> Type: {bookingDetails.room.type}</p>
-            <p> Price per Night: ${bookingDetails.room.pricePerNight}</p>
-            <p> Capacity : ${bookingDetails.room.capacity}</p>
-            <p> Description: {bookingDetails.room.description}</p>
-            <img src={bookingDetails.room.imageUrl} alt="" height="200" />
-          </div>
+          {bookingDetails.room ? (
+            <div>
+              <p> Type: {bookingDetails.room.type}</p>
+              <p> Price per Night: ${bookingDetails.room.pricePerNight}</p>
+              <p> Capacity: {bookingDetails.room.capacity}</p>
+              <p> Description: {bookingDetails.room.description}</p>
+              <img src={bookingDetails.room.imageUrl} alt="" height="200" />
+            </div>
+          ) : (
+            <p>Room has been deleted</p>
+          )}
           <hr />
 
           <h3>Update Status</h3>
@@ -123,23 +129,7 @@ const EditBookingPage = () => {
               <option value="CANCELLED">CANCELLED</option>
               <option value="CHECKED_IN">CHECKED IN</option>
               <option value="CHECKED_OUT">CHECKED OUT</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="paymentStatus">Payment Status</label>
-            <select
-              id="paymentStatus"
-              name="paymentStatus"
-              value={formState.paymentStatus}
-              onChange={handleChange}
-            >
-              <option value="">Select</option>
-              <option value="PENDING">PENDING</option>
-              <option value="COMPLETED">COMPLETED</option>
-              <option value="FAILED">FAILED</option>
-              <option value="REFUNDED">REFUNDED</option>
-              <option value="REVERSED">REVERSED</option>
+              <option value="NO_SHOW">NO SHOW</option>
             </select>
           </div>
 

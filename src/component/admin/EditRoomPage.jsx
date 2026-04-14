@@ -83,12 +83,14 @@ const EditRoomPage = () => {
       const result = await ApiService.updateRoom(formData);
       if (result.status === 200) {
         setSuccess("Room updated successfully.");
+        window.scrollTo({ top: 0, behavior: "smooth" });
         setTimeout(() => {
           navigate("/admin/manage-rooms");
         }, 3000);
       }
     } catch (error) {
       setError(error.response?.data?.message || error.message);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setTimeout(() => {
         setError("");
@@ -108,9 +110,9 @@ const EditRoomPage = () => {
           }, 3000);
         }
       } catch (error) {
+        // Show the error and keep it visible — do not auto-clear on delete failure
         setError(error.response?.data?.message || error.message);
-      } finally {
-        setTimeout(() => setError(""), 5000);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
   };
